@@ -1,0 +1,24 @@
+OS:
+- Windows (likely server)
+
+Open Ports:
+- 80 (IIS)
+
+- running nikto scan
++ Server: Microsoft-IIS/6.0
++ Retrieved microsoftofficewebserver header: 5.0_Pub
++ Allowed HTTP Methods: OPTIONS, TRACE, GET, HEAD, DELETE, PUT, POST, COPY, MOVE, MKCOL, PROPFIND, PROPPATCH, LOCK, UNLOCK, SEARCH 
+
+- running dirb for common dirs/files
+- got remote shell with iis_webdav_scstoragepathfromurl exploit
+- OS Version: 5.2.3790 Service Pack 2 Build 3790
+- downloaded local priv esc exploit (MS11-046)
+- unable to compile to exe, installing mingw-064
+- compiled
+- checking host for wget, curl to copy file
+- only certutil available
+- unable to use certutil, receiving errors
+- finding another way to priv esc
+- suggester in meterpreter
+- kitrap0d, success
+- root access
