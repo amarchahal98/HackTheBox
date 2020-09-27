@@ -1,0 +1,51 @@
+OS:
+- Windows 2012 R2 (6.3 Build 9600)                      
+
+Hostname:
+- OPTIMUM
+
+Open Ports:
+- 80:
+    - checking webserver
+    - HttpFileServer 2.3 (Rejetto)
+    - Metasploit exploit
+
+
+- load msfconsole
+- set listener in nc
+- no need, metasploit exploit does this already
+- got remote shell
+- user: OPTIMUM\kostas
+- getsystem didn't work, session not correct architecture
+- ps to find process to migrate to
+- got proper architecture in session
+- tried getsytsem again, no luck
+- import incognito to find user tokens, no luck
+- looking through user folders
+- tried priv esc with ms16_032
+- downloaded sherlock.ps1 to machine with certutil
+- found vulnerabilities:
+
+Title      : Secondary Logon Handle
+MSBulletin : MS16-032
+CVEID      : 2016-0099
+Link       : https://www.exploit-db.com/exploits/39719/
+VulnStatus : Appears Vulnerable
+
+Title      : Windows Kernel-Mode Drivers EoP
+MSBulletin : MS16-034
+CVEID      : 2016-0093/94/95/96
+Link       : https://github.com/SecWiki/windows-kernel-exploits/tree/master/MS1
+             6-034?
+VulnStatus : Appears Vulnerable
+
+Title      : Win32k Elevation of Privilege
+MSBulletin : MS16-135
+CVEID      : 2016-7255
+Link       : https://github.com/FuzzySecurity/PSKernel-Primitives/tree/master/S
+             ample-Exploits/MS16-135
+VulnStatus : Appears Vulnerable
+
+- priv esc from 41020.c
+- tried compile to c, failed, downloaded exe instead
+

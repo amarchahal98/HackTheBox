@@ -1,0 +1,19 @@
+OS:
+- Ubuntu 16.04.2
+
+Open Ports:
+- 80
+
+
+- ran dirb
+- found webshell
+- using webshell to create reverse shell
+- grabbed user flag
+- spawn tty shell
+- check sudo -l
+- able to switch to scriptmanager with sudo -u scriptmanager /bin/bash
+- found /scripts folder
+- python file and txt file
+- possible cronjob, is run as root
+- change python script to reverse shell
+- reverse shell opened as root

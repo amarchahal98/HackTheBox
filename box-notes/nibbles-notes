@@ -1,0 +1,35 @@
+OS:
+- Ubuntu
+
+Open Ports:
+- SSH:
+	OpenSSH 7.2p2
+
+- HTTP:
+	Apache httpd 2.4.18
+    - Directories:
+        http://10.10.10.75/nibbleblog/admin/
+        http://10.10.10.75/nibbleblog/content/
+        http://10.10.10.75/nibbleblog/languages/
+        http://10.10.10.75/nibbleblog/plugins/
+        http://10.10.10.75/nibbleblog/themes/
+
+    - Webpages:
+       http://10.10.10.75/nibbleblog/index.php
+       http://10.10.10.75/nibbleblog/README 
+       http://10.10.10.75/nibbleblog/admin.php
+        - admin login, potential bruteforce
+        - using hydra
+        - login threshold set
+        - trying some obvious passwords
+        - logged into admin with nibbles
+
+- found nibbleblog version from admin page
+- used metasploit exploit nibbleblog_file_upload for remote shell
+- got remote shell as user, no root priv
+- check sudo -l, has root permissions to one specific file:
+    (root) NOPASSWD: /home/nibbler/personal/stuff/monitor.sh
+- modified file to include bash -i, ran with sudo
+- did not work, had to use absolute path of file
+- got root access
+
