@@ -1,0 +1,27 @@
+OS:
+Windows Server
+
+Open Ports:
+- 80 (IIS)
+
+Metasploit exploit: scstoragepathfromurl
+Computer        : GRANNY
+OS              : Windows .NET Server (5.2 Build 3790, Service Pack 2).
+Architecture    : x86
+System Language : en_US
+Domain          : HTB
+Logged On Users : 3
+Meterpreter     : x86/windows
+
+- migrate process to getuid
+- User: NT AUTHORITY\NETWORK SERVICE
+- running suggester
+- kitrap0d to elevate rights
+
+- User Flag:
+700c5dc163014e22b3e408f8703f67d1
+
+- Root Flag:
+aa4beed1c0584445ab463a6747bd06e9
+
+
