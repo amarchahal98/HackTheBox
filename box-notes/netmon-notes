@@ -1,9 +1,16 @@
 OS:
+Windows Server 2016 Standard
 
+Users:
+- Administrator
+- Public
 
 Open Ports:
 PORT      STATE SERVICE
 21/tcp    open  ftp                             
+    - Microsoft ftpd
+    - anonymous login allowed
+
 135/tcp   open  msrpc                           
 139/tcp   open  netbios-ssn
 445/tcp   open  microsoft-ds                                                                     
@@ -22,3 +29,24 @@ PORT      STATE SERVICE
 - downloaded user.txt
 User Flag:
 dd58ce67b49e15105e88096c8d9255a5
+
+- tried Guest login to SMB, acc disabled
+- port 80 also open, didn't show up in initial scan, possibly due to delay in service starting up
+- running service on port 80: 
+    PRTG Network Monitor 18.2.38
+
+- reviewing docs to find db files
+- downloaded with ftp, was in All users Appdata folder
+- found old password in db .bak file
+- mod year from 2018 to 2019
+- logged in
+- searching for exploit. found:
+https://www.exploit-db.com/exploits/46527
+
+- using burp to grab admin cookie
+- passed into exploit
+- pentester account created
+- using psexec to login
+- logged in as SYSTEM
+- root flag:
+3018977fb944bf1878f75b879fba67cc
