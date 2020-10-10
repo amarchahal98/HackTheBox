@@ -1,0 +1,71 @@
+OS:
+- Server 2016
+
+# Nmap Scan
+
+└──╼ $nmap -T5 10.10.10.100
+Starting Nmap 7.80 ( https://nmap.org ) at 2020-10-10 13:57 PDT
+Warning: 10.10.10.100 giving up on port because retransmission cap hit (2).
+Nmap scan report for 10.10.10.100
+Host is up (0.086s latency).
+Not shown: 976 closed ports
+PORT      STATE    SERVICE
+53/tcp    open     domain
+88/tcp    open     kerberos-sec
+135/tcp   open     msrpc
+139/tcp   open     netbios-ssn
+389/tcp   open     ldap
+445/tcp   open     microsoft-ds
+  - SMBClient scan:
+  └──╼ $smbclient -L \\\\10.10.10.100\\
+  Enter WORKGROUP\amar's password: 
+  Anonymous login successful
+  
+  	Sharename       Type      Comment
+  	---------       ----      -------
+  	ADMIN$          Disk      Remote Admin
+  	C$              Disk      Default share
+  	IPC$            IPC       Remote IPC
+  	NETLOGON        Disk      Logon server share 
+  	Replication     Disk      
+  	SYSVOL          Disk      Logon server share 
+  	Users           Disk      
+  SMB1 disabled -- no workgroup available
+
+
+464/tcp   open     kpasswd5
+555/tcp   filtered dsf
+593/tcp   open     http-rpc-epmap
+636/tcp   open     ldapssl
+902/tcp   filtered iss-realsecure
+1011/tcp  filtered unknown
+1152/tcp  filtered winpoplanmess
+2035/tcp  filtered imsldoc
+3268/tcp  open     globalcatLDAP
+3269/tcp  open     globalcatLDAPssl
+6689/tcp  filtered tsa
+16993/tcp filtered amt-soap-https
+49152/tcp open     unknown
+49153/tcp open     unknown
+49154/tcp open     unknown
+49155/tcp open     unknown
+49157/tcp open     unknown
+49158/tcp open     unknown
+
+
+- enumerating smb further
+- connect to replicate share
+- mget *
+- looked at Groups.xml
+- gpp-decrypt cpassword
+  Username: active.htb\svc_tgs
+  Password: GPPstillStandingStrong2k18
+
+- log onto Users share with svc_tags
+- grab user flag
+- ran aggressive nmap scan
+- kerberoasted DC
+- hashcat hash
+- password cracked
+- psexec.py with password
+- root access
