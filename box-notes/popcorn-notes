@@ -1,0 +1,43 @@
+OS:
+- Linux Ubuntu
+
+Open Ports:
+- 22
+- 80
+
+80:
+- Apache/2.2.12 (Ubuntu) 
+- found rhost/test.php
+- found username: www-data
+- found architecture: 64bit
+- running nikto + dirb scan
+- server seems vulnerable to shellshock
+- loaded msfconsole and set options
+- tried modify request host sender to popcorn.htb (nothing)
+- nothing interesting from dirb
+- tried dirb search without extensions, found a lot more:
++ http://10.10.10.6/cgi-bin/ (CODE:403|SIZE:286)                                                                                        
++ http://10.10.10.6/index (CODE:200|SIZE:177)                                                                                           
++ http://10.10.10.6/index.html (CODE:200|SIZE:177)                                                                                      
++ http://10.10.10.6/server-status (CODE:403|SIZE:291)                                                                                   
++ http://10.10.10.6/test (CODE:200|SIZE:47328)                                                                                          
+==> DIRECTORY: http://10.10.10.6/torrent/      
+- checking directory, using service "Torrent Hoster"
+- enumerating service, upload feature
+- requires login
+- capture login request with burp
+- add to sqlmap, and start scan
+- log in as created user
+- found upload feature
+- tried uploading image, worked
+- tried uploading php file, failed
+- captured both requests in burp
+- modded php request by prepending data with part of image file + changing filename to image.png.php
+- file successfully uploaded
+- looking for an uploads folder
+- /torrent/upload/
+- ran php file
+- was able to interface with this using php?bd=hostname
+- captured user flag
+- priv esc with motd exploit
+- root access
