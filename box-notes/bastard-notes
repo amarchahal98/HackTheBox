@@ -1,0 +1,31 @@
+OS:
+- Windows
+
+Open Ports:
+- 80/tcp    open  http    Microsoft IIS httpd 7.5
+- 135/tcp   open  msrpc   Microsoft Windows RPC
+- 49154/tcp open  msrpc   Microsoft Windows RPC
+
+- checking if actually IIS 7.5, ran metasploit exploit. failed
+- check webserver, drupal 7
+- trying some default creds, no luck
+- tried creating user account
+Username: user
+Email: user@user.com
+
+- searchsploit for drupal 7
+- rce exploits exist, but require a user account
+- enumerating dirb results
+http://10.10.10.9/xmlrpc.php
+- tried modifying request type from GET to POST, nothing
+- found php exploit for drupal 7.54
+- modified fields on exploit, ran against target
+- received RCE
+- started up http server, copied nc over
+- reverse tunnel
+- captured user flag
+- copied sherlock.ps1 for priv esc
+- found compatible exploit:
+https://github.com/SecWiki/windows-kernel-exploits/tree/master/MS15-051
+- got root access
+
