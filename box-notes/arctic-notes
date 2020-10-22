@@ -1,0 +1,36 @@
+OS:
+- Windows
+
+Open Ports:
+135/tcp   open  msrpc?
+8500/tcp  open  fmtp?
+49154/tcp open  unknown
+
+- running nmap scans
+- blocking scans, using -Pn
+- tried accessing 8500 from browser (HTTP)
+- found 2 directories:
+CFIDE/               dir   03/22/17 08:52 μμ
+cfdocs/              dir   03/22/17 08:55 μμ
+- opening both
+- service name: Coldfusion
+- searchsploit for exploits
+- found coldfusion file upload exploit
+- ran msfconsole
+- tried running exploit
+- fails in a few seconds
+- set target to localhost
+- opened in Burp to inspect 
+- re-sent exploit
+- worked, received file upload location
+- set up nc listener
+- navigate to uploaded file
+- got reverse shell
+- grabbed user flag
+- copied sherlock.ps1 and ran to find potential priv esc
+- ms10-092
+- msfvenom reverse tcp payload
+- set up listener in msfconsole
+- migrate process to x64
+- ran ms10-092 priv esc exploit
+- root access
