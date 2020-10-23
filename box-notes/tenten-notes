@@ -1,0 +1,44 @@
+OS:
+- Linux (Ubuntu)
+
+Open Ports:
+- 22
+- 80
+-- Subdirectories:
+http://10.10.10.10/.cache/
+http://10.10.10.10/.bashrc
+http://10.10.10.10/.profile
+
+
+- enumerating website
+- running nikto + dirb
+- wordpress
+- running wpscan
+- found out of date plugin: Job Manager
+- ran wpscan to enumerate users
+- found user: takis
+- CVE: CVE-2015-6668  
+- found exploit to find uploaded files
+- enumerating plugin
+- sent in job application
+- was able to change # of application directory from url
+- running script to enumerate through all applications
+- found one named: HackerAccessGranted
+- copied file name to job manager exploit to find location of uploaded file
+- modify dates to cover a larger timeframe
+- ran exploit and provided filename
+- found: http://10.10.10.10//wp-content/uploads/2017/04/HackerAccessGranted.jpg
+- save image
+- extract data with steghide
+- received PEM RSA private key
+- use ssh2john to prep for crack
+- ran john using rockyou wordlist
+- pw: superpassword
+- ran ssh -i id_rsa takis@10.10.101.0
+- supplied pw for private key
+- got shell on machine
+- grabbed user flag
+- checking kernel version
+- found local priv esc: https://www.exploit-db.com/exploits/44298
+- got root access
+
