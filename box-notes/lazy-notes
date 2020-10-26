@@ -1,0 +1,29 @@
+OS:
+- Linux
+
+Open Ports:
+- 22
+- 80
+
+- enumerating web server
+- trying default passwords
+- registered for an account
+- testing for sql injection on both register + login
+- nothing worked
+- setting up bitflip attack
+- testing with burp, and account named bdmin
+- got admin cookie
+- logged in
+- found sshkey
+- copied, ssh to server using private key and username mitsos
+- got user flag
+- looking for priv escalation
+- sudo -l requires passwords
+- ran linenum.sh
+- mitsos's home directory has an executable with root's uid
+- ltrace to see command being run in system
+- "cat /etc/passwd"
+- created new file named cat, set one cmd: /bin/sh
+- made file executable
+- export home dir in path
+- got root shell
