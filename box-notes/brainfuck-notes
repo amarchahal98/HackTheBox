@@ -1,0 +1,68 @@
+OS:
+- Linux
+
+Open Ports:
+- 22/tcp  open  ssh
+- 25/tcp  open  smtp
+- 110/tcp open  pop3
+- 143/tcp open  imap
+- 443/tcp open  https
+
+- enumerating 443
+- default nginx page
+- captured get request in burp
+- modified host to brainfuck.htb
+- got new webpage
+- wordpress site
+- tried to sql inject login page
+- no luck
+- inspecting ssl cert
+- found email: orestis@brainfuck.htb 
+- found DNS name: https://sup3rs3cr3t.brainfuck.htb
+- added to hosts file
+- navigated to webpage
+- found forum website
+- wpscan user enumeration
+- admin and administration
+- ran wpscan
+- vulnerability with WordPress Plugin WP Support Plus Responsive Ticket System
+- searchsploit for plugin
+- priv esc exploit
+- copied & modified exploit
+- ran against webserver
+- got admin session in wordpress
+- looking at wp-admin settings
+- found add-on: "Easy WP SMTP"
+- found credentials in webpage:
+SMTP Username: orestis (orestis@brainfuck.htb)
+SMTP Password: kHGuERB29DNiNE
+
+- set up thunderbird with email
+- found "secret forum" creds in email:
+username: orestis
+password: kIEnnfEKJ#9UmdO
+
+- looking through forum posts
+- found ciphertext
+- looking for any text that can be similar
+- copied signatures, original + ciphered
+- used original as key to decrypt
+- key: fuckmybrain
+- decrypting all posts on forum
+- found URL:
+https://10.10.10.17/8ba5aa10e915218697d1c658cdee0bb8/orestis/id_rsa
+- downloaded rsa key
+- encrypted
+- ssh2john 
+- ran john on key
+
+- found password: 3poulakia!
+
+- ssh to server with rsa key as orestis
+- got user access
+- contents of orestis home folder show root.txt being encrypted with rsa
+- p q and e provided
+- using python script to decrypt
+- got root flag
+
+
