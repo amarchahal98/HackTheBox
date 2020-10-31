@@ -1,0 +1,31 @@
+OS:
+- Linux
+
+Open Ports:
+- 22
+- 80: nginx 1.10.0
+
+- enumerating port 80
+- running dirb + nikto scan
+- found dir: http://10.10.10.24/test.html
+- found dir: /uploads/ -- 403 forbidden access
+- using gobuster to scan faster
+- nothing, trying with php extension
+- found exposed.php
+- shows webpage with curl cmd
+- tried to curl my webserver
+- created php shell script
+- captured curl request in burp
+- modified to add -o cmd and save file to /uploads/
+- created GET request to confirm file exists
+- modified get request to test RCI
+- works
+- ran nc cmd to get shell
+- upgraded to tty shell
+- looking for files with root uid
+- running linenum.sh
+- found exploit for screen 4.5
+- had to compile bianries locally
+- modified exploit
+- ran on machine
+- root access
