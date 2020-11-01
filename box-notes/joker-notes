@@ -1,0 +1,56 @@
+OS:
+- Linux
+
+Open Ports:
+- 22/tcp   open  ssh  OpenSSH 7.3p1 Ubuntu 1ubuntu0.1 (Ubuntu Linux; protocol 2.0)
+- 3128/tcp open  http-proxy Squid http proxy 3.5.12
+
+
+- nmap scan failing, using -Pn
+- running udp scan
+- enumerating port 3128
+- webserver
+- says invalid URL when accessing on HTTP
+- tried HTTPS, did not work
+- UDP scan shows tftp open
+- reading setup guide for squid web proxy
+- downloaded /etc/squid/squid.conf
+- looking through data
+- refers to /etc/squid/passwords for authentication
+- download file from tftp
+- found creds:
+kalamari:$apr1$zyzBxQYW$pL360IoLQ5Yum5SLTph.l0
+- cracking password with hashcat
+- cracked hash. password: ihateseafood
+- logging into proxy through burp
+
+- works, tried navigating to 10.10.10.21 again
+- different error message
+- tried navigating to localhost
+- presented with a webserver
+- running gobuster
+- found /list and /console
+- /console shows python console
+- printed python version: 2.7.12+
+- os.system not giving proper output, trying os.popen instead
+- found user: werkzeug
+- checking nc version to see if session can be created
+- got uname info
+Linux joker 4.8.0-52-generic #55-Ubuntu SMP Fri Apr 28 13:28:50 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux\n
+
+- creating reverse shell
+- web service died, reset box
+- sent nc process to background, was able to get session
+- session as werkzeug
+- enumerating users
+- checking sudo -l
+- able to sudoedit if wildcards are matched
+- creating symlink to user's authorized ssh key file
+- created key pair, copied public key
+- modified file
+- ssh as user alekos
+- looks like backup is creating tar backup of development
+- created symlink of /root/
+- waiting for backup to complete
+- unzip backup
+- got root flag
