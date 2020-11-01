@@ -1,0 +1,55 @@
+OS:
+- Linux
+
+Open Ports:
+- 22/tcp open  ssh
+- 53/tcp open  domain
+- 80/tcp open  http | Apache httpd 2.4.7 
+
+- enumerating port 53
+- zone info:
+bank.htb.               604800  IN      SOA     bank.htb. chris.bank.htb. 2 604800 86400 2419200 604800
+bank.htb.               604800  IN      NS      ns.bank.htb.
+bank.htb.               604800  IN      A       10.10.10.29
+ns.bank.htb.            604800  IN      A       10.10.10.29
+www.bank.htb.           604800  IN      CNAME   bank.htb.
+bank.htb.               604800  IN      SOA     bank.htb. chris.bank.htb. 2 604800 86400 2419200 604800
+
+- added line to /etc/hosts:
+- 10.10.10.29     bank.htb www.bank.htb
+- login page
+- trying sql injection
+- not working
+
+- enumerating directories:
+/index.php (Status: 302) [Size: 7322]
+/login.php (Status: 200) [Size: 1974]
+/support.php (Status: 302) [Size: 3291]
+/uploads (Status: 301) [Size: 305]
+/assets (Status: 301) [Size: 304]
+/logout.php (Status: 302) [Size: 0]
+/inc (Status: 301) [Size: 301]
+/server-status (Status: 403) [Size: 288]
+/balance-transfer (Status: 301) [Size: 314]
+
+- checking server responses in burp
+- modified 302 redirect requests to 200 OK
+- able to see a few more pages on balance-transfer and support.php
+- support.php has image upload feature
+- tried uploading php script
+- uploaded image
+- testing if magic bytes file check can be tricked as img
+- not working
+- checking server response
+- modified file extension to .htb
+- upload worked
+- got RCI
+- got reverse shell
+- spawned pty shell
+- ran linenum.sh
+- looking for setuid root owned files
+- /etc/passwd has write permissions
+- ran openssl passwd to generate password
+- added to root in /etc/passwd
+- tried root login
+- root access
