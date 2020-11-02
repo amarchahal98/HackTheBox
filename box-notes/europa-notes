@@ -1,0 +1,45 @@
+OS:
+- Linux
+
+Open Ports:
+PORT    STATE SERVICE
+22/tcp  open  ssh
+80/tcp  open  http
+443/tcp open  https
+
+
+
+- running TCP + UDP nmap scans
+- enumerating http/https ports
+- default apache page
+- enumerating certificate
+- domain:
+europacorp.htb
+
+- user:
+admin@europacorp.htb
+
+- subdomains:
+admin-portal.europacorp.htb
+www.europacorp.htb
+
+- found login page at admin-portal
+- trying to login with admin@europacorp.htb
+- trying sql injection
+- client side email syntax check
+- trying sql inject through burp, works
+- logged into an admin console
+- Tools tab generates what seems to be an openvpn config file
+- captured request in burp
+- looks like regex expression to modify file
+- researching php + regex exploits
+- using /e to get RCI with system('')
+- nc not working, curl python script for reverse shell and ran
+- got reverse shell
+- running linenum.sh to find priv esc
+- cronjob to execute a script that does not exist
+- www-data can create/modify script
+- runs as root
+- created bash script to forward nc session to myself
+- checking frequency of job: every 1 min
+- root access
