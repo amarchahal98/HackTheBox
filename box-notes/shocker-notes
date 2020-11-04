@@ -1,0 +1,22 @@
+OS:
+- Linux
+
+Open Ports:
+- 80/tcp   open  http    Apache httpd 2.4.18 ((Ubuntu))
+- 2222/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.2 (Ubuntu Linux; protocol 2.0)
+
+- running gobuster + nikto
+- enumerating port 80
+- possible stegonography in image
+- downloaded image to verify
+- nothing there
+- looking cgi-bin exists
+- most likely shellshock, enumerating cgi-bin for files
+- found file, user.sh
+- testing shellshock exploit against file
+- got user access
+- got user flag
+- checking sudo -l
+- can use perl as root
+- opened shell with perl
+- root access
