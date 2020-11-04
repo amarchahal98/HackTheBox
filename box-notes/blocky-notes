@@ -1,0 +1,43 @@
+OS:
+- Linux
+
+Open Ports:
+- 21/tcp   open   ftp     ProFTPD 1.3.5a
+- 22/tcp   open   ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.2 (Ubuntu Linux; protocol 2.0)
+- 80/tcp   open   http    Apache httpd 2.4.18 ((Ubuntu))
+- 8192/tcp closed sophos
+
+
+- enumerating ftp
+- unable to login in as anonymous/anonymous
+- enumerating website
+- wordpress website
+- running wpscan
+[+] notch
+ | Found By: Author Posts - Author Pattern (Passive Detection)
+
+- running gobuster
+
+/wiki (Status: 301) [Size: 309]
+- no info
+/wp-content (Status: 301) [Size: 315]
+- empty
+/plugins (Status: 301) [Size: 312]
+- Opens service named Cute file browser. found .jar files
+- downloaded
+- extracted files
+- ran strings on a binary. potential creds:
+root
+8YsqfCTnvxAUeduzjNSXe22
+
+/wp-includes (Status: 301) [Size: 316]
+/javascript (Status: 301) [Size: 315]
+/wp-admin (Status: 301) [Size: 313]
+- login page
+/phpmyadmin (Status: 301) [Size: 315]
+
+- trying to ssh with notch + password
+- logged in. got user flag
+- user can run all sudo cmds
+- su root
+- got root access
