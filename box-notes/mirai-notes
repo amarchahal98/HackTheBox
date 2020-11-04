@@ -1,0 +1,30 @@
+OS:
+- Linux
+
+Open Ports:
+22/tcp open  ssh     OpenSSH 6.7p1 Debian 5+deb8u3 (protocol 2.0)
+53/tcp open  domain  dnsmasq 2.76
+80/tcp open  http    lighttpd 1.4.35
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+
+- enumerating port 53
+- no zone
+- enumerating port 80
+- blank page
+- change hostname to mirai.htb
+- looking at source of page
+- domain name:
+'http://pi.hole/pihole/blockingpage
+- added pi.hole to hosts file as target IP
+- tried to access webpage again
+- got redirect to /admin
+- no default creds for pihole
+- tried ssh to machine with default pi creds
+- got in
+- sudo all commands
+- root flag file doesn't exist, says file got removed
+- lsblk to see what's attached
+- strings on /dev/sdb
+- got root flag
+
