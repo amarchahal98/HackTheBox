@@ -1,0 +1,37 @@
+OS:
+- FreeBSD
+
+Open Ports:
+- PORT    STATE SERVICE    VERSION
+- 80/tcp  open  http       lighttpd 1.4.35
+- 443/tcp open  ssl/https?
+
+- enumerating 443
+- pfsense login
+- tried default creds, didn't work
+- running nikto + dirb
+
+/themes (Status: 301) [Size: 0]
+/css (Status: 301) [Size: 0]
+/includes (Status: 301) [Size: 0]
+/javascript (Status: 301) [Size: 0]
+/classes (Status: 301) [Size: 0]
+/widgets (Status: 301) [Size: 0]
+/tree (Status: 301) [Size: 0]
+/shortcuts (Status: 301) [Size: 0]
+/installer (Status: 301) [Size: 0]
+/wizards (Status: 301) [Size: 0]
+/system-users.txt
+/changelog.txt
+
+- found credentials:
+username: Rohit
+password: company defaults
+
+- trying rohit / pfsense
+- logged in
+- checking pfsense cve's
+- modifying python exploit
+- open nc session
+- got reverse shell
+- root access
