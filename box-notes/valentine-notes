@@ -1,0 +1,31 @@
+OS:
+- Linux
+
+Open Ports:
+- PORT    STATE SERVICE
+- 22/tcp  open  ssh
+- 80/tcp  open  http
+- 443/tcp open  https
+
+- running nikto + gobuster
+- reviewing ssl cert for any information
+- /dev/
+- found notes.txt and 'hype_key' file
+- looks like hex data
+- convert to ascii
+- found SSH RSA key
+- key is encrypted
+- brute forcing passphrase
+- no results
+
+- enumerating webserver further
+- vulnerable to heartbleed attack
+- ran python heartbleed exploit x 100
+- found base64 encoded data
+- decrypted
+- ssh private key passphrase
+- ssh to server
+- check bash history
+- tmux session
+- loaded
+- root access
