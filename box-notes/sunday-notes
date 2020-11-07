@@ -1,0 +1,49 @@
+OS:
+- Solaris
+
+Open Ports:
+- PORT    STATE SERVICE VERSION
+- 79/tcp  open  finger  Sun Solaris fingerd
+- 111/tcp open  rpcbind 2-4 (RPC #100000)
+- Service Info: OS: Solaris; CPE: cpe:/o:sun:sunos
+ 
+- enumerating port 79
+user@kali:~/Documents/htb/sunday$ finger @sunday.htb
+No one logged on
+
+
+- running metasploit to enumerate users:
+
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: adm
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: lp
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: uucp
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: nuucp
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: dladm
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: listen
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: bin
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: daemon
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: gdm
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: mysql
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: noaccess
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: nobody
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: nobody4
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: postgres
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: root
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: svctag
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: sys
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: xvm
+[+] 10.10.10.76:79        - 10.10.10.76:79 - Found user: openldap
+
+- running finger user enum script
+- sunny
+- ssh brute force sunny's password
+sunday
+- checking sudo -l
+- got hash of sammy user
+- cracked in john
+- checking sammy's sudo -l
+- one can execute a binary named /root/troll
+- other can wget as sudo
+- ran sudo wget to save priv esc bash script file as /root/troll
+- ran sudo /root/troll as other user
+- got root access
