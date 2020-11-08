@@ -1,0 +1,19 @@
+OS:
+- Windows
+
+Open Ports:
+- 80
+
+- running all web enum scans
+- found: http://10.10.10.93/transfer.aspx
+- file upload
+- image filetype only
+- enumerating all filetypes that can be uploaded
+- .config can be uploaded 
+- looking for aspx RCE as config file
+- uploaded, executed RCE for reverse nc session
+- pivot to msfconsole session
+- ran exploit suggester again session
+- vulnerable to schelevator
+- drop to shell
+- root access
