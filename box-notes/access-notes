@@ -1,0 +1,28 @@
+OS:
+- Windows
+
+Open Ports:
+- 21/tcp open  ftp     Microsoft ftpd
+- | ftp-anon: Anonymous FTP login allowed (FTP code 230)
+- 23/tcp open  telnet?
+- 80/tcp open  http    Microsoft IIS httpd 7.5
+
+
+- enumerating port 21
+- anonymous login allowed
+08-23-18  08:16PM       <DIR>          Backups
+08-24-18  09:00PM       <DIR>          Engineer
+
+- Access control zip seems password protected
+- running strings on backup.mdb
+- created wordlist
+- zip2john of access control file
+- cracked hash with password: access4u@security
+- opening pst file to check for data in emails
+- found creds:
+security:4Cc3ssC0ntr0ller
+
+- enumerating user folders
+- lnk file using runas administrator exists in Public's Desktop folder
+- using cmd runas /user:ACCESS\Administrator /savecred with powershell reverse shell command
+- root access
