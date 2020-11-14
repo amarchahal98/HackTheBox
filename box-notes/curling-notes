@@ -1,0 +1,31 @@
+OS:
+- Linux
+
+Open Ports:
+- 22
+- 80
+
+- enumerating webpage
+- got hint of cewl
+- ran cewl on webpage
+- ran nikto + dirb
+- found secrets.txt
+Q3VybGluZzIwMTgh
+- base64 decode: Curling2018!
+- fuzzing username in http://10.10.10.150/administrator/
+- found username: Floris
+- logging in
+- adding new template
+- added php RCI code
+- uploaded, looking for templates dir
+- ran file, got nc session
+- floris home dir has zipped + encoded file named password backup
+- got password from file, log in as floris
+- user's home dir curls localhost in cronjob
+- used -K syntax to grab local file
+- got root.txt
+- to get root access:
+- modified curl file to curl modified sudoers file from webserver
+- output = /etc/sudoers
+- sudo as floris
+- root access
