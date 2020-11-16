@@ -1,0 +1,39 @@
+OS:
+- Linux
+
+Open Ports:
+
+ PORT      STATE SERVICE
+- 22/tcp    open  ssh
+- 80/tcp    open  http
+- 111/tcp   open  rpcbind
+- 6697/tcp  open  ircs-u
+- 8067/tcp  open  infi-async
+- 43832/tcp open  unknown
+- 65534/tcp open  unknown
+
+
+- enumerating port 80, running scripts
+- default page exists: /manual
+- Apache HTTP Server Version 2.4
+- tried nc to port 6697
+nc 10.10.10.117 6697
+:irked.htb NOTICE AUTH :*** Looking up your hostname...
+:irked.htb NOTICE AUTH :*** Couldn't resolve your hostname; using your IP address instead
+
+- enumerating port 111, running rpcinfo
+- found service: UnrealIRCd
+- enumerating version
+- found backdoor
+- exploited with nc
+- got reverse shell
+- enumerating user dirs
+- found steg pw: UPupDOWNdownLRlrBAbaSSss
+- extracted password, switch login to user
+- got user flag
+- looking for setuid with owner root
+- found file that uses local file to enumerate users
+- file doesn't exist
+- created file and chmod +x
+- ran executable
+- root access 
