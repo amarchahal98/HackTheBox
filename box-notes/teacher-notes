@@ -1,0 +1,31 @@
+OS:
+- Linux
+
+Open Ports:
+- 80
+
+
+Found dirs:
+/images (Status: 301) [Size: 313]
+/css (Status: 301) [Size: 310]
+/manual (Status: 301) [Size: 313]
+/js (Status: 301) [Size: 309]
+/javascript (Status: 301) [Size: 317]
+/fonts (Status: 301) [Size: 312]
+/phpmyadmin (Status: 403) [Size: 297]
+/moodle (Status: 301) [Size: 313]
+
+Username: Giovanni
+Password: Th4C00lTheacha
+
+- logged in
+- searching exploit for moodle
+- used exploit to get RCE
+- got reverse shell
+- monitoring linux processes to find cron jobs running
+- shows dir auto backup script running as root
+- removed dir it edits and created symlink in its place pointing to /etc/shadow
+- got full access to /etc/shadow
+- generated password with openssl and modified file
+- su root
+- root access
