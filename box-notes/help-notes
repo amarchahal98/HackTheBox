@@ -1,0 +1,25 @@
+OS:
+- Linux
+
+Open Ports:
+PORT     STATE SERVICE
+22/tcp   open  ssh
+80/tcp   open  http
+3000/tcp open  ppp
+
+- enumerating port 80
+
+- subdirs:
+/support (Status: 301) [Size: 314]
+/javascript (Status: 301) [Size: 317]
+/server-status (Status: 403) [Size: 300]
+
+- /support shows ticketing system: helpdeskz
+- found exploit
+- created ticket with php reverse shell attachment
+- says invalid file type but still got uploaded
+- ran exploit to execute reverse shell
+- outdated kernel
+- 4.4.0-116
+- ran priv esc exploit
+- root access
