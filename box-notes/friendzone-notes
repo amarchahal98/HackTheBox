@@ -1,0 +1,76 @@
+OS:
+- Linux
+
+Open Ports:
+- 21/tcp  open  ftp                                    
+- 22/tcp  open  ssh                              
+- 53/tcp  open  domain
+- 80/tcp  open  http
+- 139/tcp open  netbios-ssn
+- 443/tcp open  https
+- 445/tcp open  microsoft-ds
+
+- enumerating port 80
+- potential email address/domain:
+- info@friendzoneportal.red
+
+- robots.txt:
+'seriously ?!'
+
+- enumerating port 21
+- no known exploits for version
+- no anonymous login
+
+- enumerating port 53
+- found records in zone:
+friendzoneportal.red.   604800  IN      A       127.0.0.1
+admin.friendzoneportal.red. 604800 IN   A       127.0.0.1
+files.friendzoneportal.red. 604800 IN   A       127.0.0.1
+imports.friendzoneportal.red. 604800 IN A       127.0.0.1
+vpn.friendzoneportal.red. 604800 IN     A       127.0.0.1
+
+- added to /etc/hosts file
+- navigated to each page, nothing
+ 
+- enumerating port 445
+        Sharename       Type      Comment
+        ---------       ----      -------
+        print$          Disk      Printer Drivers
+        Files           Disk      FriendZone Samba Server Files /etc/Files
+        general         Disk      FriendZone Samba Server Files
+        Development     Disk      FriendZone Samba Server Files
+        IPC$            IPC       IPC Service (FriendZone server (Samba, Ubuntu))
+
+
+- enumerating port 443
+- reviewing certificate for info
+
+Country JO
+State/Province CODERED
+Locality AMMAN
+Organization CODERED
+Organizational Unit CODERED
+Common Name friendzone.red
+email: haha@friendzone.red
+
+
+- found more potential pages:
+friendzone.red       
+administrator1.friendzone.red
+hr.friendzone.red
+uploads.friendzone.red
+
+- uploads.friendzone.red has uploads page
+- administrator1 has a login
+- logged in with found credentials
+- LFI on webpage
+- uploaded php reverse shell in writable SMB directory
+- using LFI to execute file: https://administrator1.friendzone.red/dashboard.php?image_id=a.jpg&pagename=/etc/Development/reverse
+- mysql_data.conf had friend user credentials
+- su to friend
+- ran pspy to monitor for running jobs
+- found reporter.py
+- not much going on in file, just print statements from variables declared in script
+- python os module is writable
+- added python -c cmd to get reverse shell
+- got root access
