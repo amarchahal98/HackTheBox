@@ -1,0 +1,29 @@
+OS:
+- Linux
+
+Open Ports:
+- 21
+- 22
+- 80
+- 443
+
+- enumerating ftp
+- no anonymous login
+- vsftpd 2.3.4
+- running backdoor exploit
+- getting php shell instead
+- using php cmds to enumerate user dirs
+- got SSL CA Cert
+- generated client p12 from CA cert
+- used to navigate to https://10.10.10.131 and have mutual SSL auth to work
+- received downloads webpage
+- uses base64 to identify files for download
+- base64 encoded ../.ssh/id_rsa and appended to /files/
+- using id_rsa key to try log into each user
+- enumerating user dirs from bash
+- pspy to find cronjobs
+- memcached.ini file is being ran
+- SGID bit set to dir, so able to rename/delete file
+- renamed file and added another in its place with the same name
+- modified cmd to give reverse root shell
+- root access
