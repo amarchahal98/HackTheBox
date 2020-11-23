@@ -43,3 +43,5 @@ smb permissions:
         C$                                                      READ, WRITE     Default share
         IPC$                                                    READ ONLY       Remote IPC
 
+- psexec to get SYSTEM access
+- logged in as SYSTEM
