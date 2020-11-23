@@ -1,0 +1,45 @@
+OS:
+- Windows
+
+Open Ports:
+PORT    STATE SERVICE      VERSION
+22/tcp  open  ssh          OpenSSH for_Windows_7.9 (protocol 2.0)
+135/tcp open  msrpc        Microsoft Windows RPC
+139/tcp open  netbios-ssn  Microsoft Windows netbios-ssn
+445/tcp open  microsoft-ds Windows Server 2016 Standard 14393 microsoft-ds
+Service Info: OSs: Windows, Windows Server 2008 R2 - 2012; CPE: cpe:/o:microsoft:windows
+
+
+
+- enumerating SMB shares:
+        ADMIN$          Disk      Remote Admin -  no access
+        Backups         Disk      		- got access
+        C$              Disk      Default share
+        IPC$            IPC       Remote IPC
+
+
+in note.txt:
+Sysadmins: please don't transfer the entire backup file locally, the VPN to the subsidiary office is too slow.
+
+
+- found .vhd in backup folder
+- using libguestfs-tools to mount vhd
+
+- extracted SAM and SYSTEM from system32/config
+found hash with impacket-secretsdump: 
+L4mpje:1000:aad3b435b51404eeaad3b435b51404ee:26112010952d963c8dc4217daec986d9:::
+
+creds:
+L4mpje:bureaulampje
+
+- found software: mRemoteNG
+- finding local config location
+- copied encrypted password
+- ran decrypt tool
+- got password: thXLHM96BeKL0ER2
+smb permissions:
+        ADMIN$                                                  READ, WRITE     Remote Admin
+        Backups                                                 READ, WRITE
+        C$                                                      READ, WRITE     Default share
+        IPC$                                                    READ ONLY       Remote IPC
+
