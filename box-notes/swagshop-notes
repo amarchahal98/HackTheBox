@@ -1,0 +1,38 @@
+OS:
+- Linux
+
+Open Ports:
+- 22
+- 80
+
+Dirs:
+/media (Status: 301) [Size: 312]
+/includes (Status: 301) [Size: 315]
+/lib (Status: 301) [Size: 310]
+/app (Status: 301) [Size: 310]
+/js (Status: 301) [Size: 309]
+/shell (Status: 301) [Size: 312]
+/skin (Status: 301) [Size: 311]
+/cron.sh (Status: 200) [Size: 717]
+/var (Status: 301) [Size: 310]
+/errors (Status: 301) [Size: 313]
+/mage (Status: 200) [Size: 1319]
+/server-status (Status: 403) [Size: 300]
+
+
+- runnning magescan tool to enumerate website
+- found file: /app/etc/local.xml
+data:
+<key>b355a9e0cd018d3f7f03607141518419</key>
+user: root
+pass: fMVWh7bDHpgZkyfqQXreTjU9
+
+<dbname>swagshop</dbname>
+
+- found unauthenticated user creation exploit
+- created user
+- ran authenticated RCE exploit using user created above
+- checking sudo -l
+- vim
+- using vim to spawn bash shell
+- root access
