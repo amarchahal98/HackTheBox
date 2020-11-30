@@ -1,0 +1,64 @@
+OS:
+- Linux
+
+Open Ports:
+- PORT     STATE SERVICE VERSION
+- 22/tcp   open  ssh     OpenSSH 7.4 (protocol 2.0)
+- 80/tcp   open  http    nginx 1.12.2
+- |_http-server-header: nginx/1.12.2
+- |_http-title: Site doesn't have a title (text/html).
+- 9200/tcp open  http    nginx 1.12.2
+- | http-methods: 
+- |_  Potentially risky methods: DELETE
+- |_http-server-header: nginx/1.12.2
+
+- enumerating port 80. image file, nothing else
+- enumerating port 9200
+- elastic search
+- indices:
+health status index   uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+green  open   .kibana 6tjAYZrgQ5CwwR0g6VOoRg   1   0          1            0        4kb            4kb
+yellow open   quotes  ZG2D1IqkQNiNZmi2HRImnQ   5   1        253            0    262.7kb        262.7kb
+yellow open   bank    eSVpNfCfREyYoVigNWcrMw   5   1       1000            0    483.2kb        483.2kb
+
+- enumerating indices
+- bank has a bunch of random user information, nothing too interesting
+- quotes has text in spanish
+- translating all results to english
+- filtering through data
+- found:
+This key cannot be lost, I save it here: cGFzczogc3BhbmlzaC5pcy5rZXk =
+I have to save the key for the machine: dXNlcjogc2VjdXJpdHkg
+
+- base64 decode:
+
+user: security
+spanish.is.key
+
+- ssh to machine
+- unable to sudo -l
+- running enum scripts
+- kernel version: 3.10.0-957.1.3.el7.x86_64
+- 64 bit
+- CentOS 7
+- process listening on port 5601. google shows kibana port
+
+- ssh forwarding service
+# ~C
+-L 5602:127.0.0.1:5601
+
+- navigate to localhost:5602
+- got kibana portal
+- searching for kibana exploit for that version (6.4.2)
+- LFI exploit. used reverse shell to log in as kibana user
+- checking for folders/processes owned by root
+- /etc/logstash/
+- looking at conf.d
+- reading from file:
+path => "/opt/kibana/logstash_*"
+
+- creating logstash file in /opt/kibana/
+- using syntax required for cmd
+- waiting for execution, monitoring with pspy
+- got shell
+- root access
