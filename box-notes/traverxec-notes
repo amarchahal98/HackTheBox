@@ -1,0 +1,46 @@
+OS:
+- Debian 10
+- Linux traverxec 4.19.0-6-amd64 #1 SMP Debian 4.19.67-2+deb10u1 (2019-09-20) x86_64 GNU/Linux
+
+Open Ports:
+- 22/tcp open  ssh     OpenSSH 7.9p1 Debian 10+deb10u1 (protocol 2.0)
+- | ssh-hostkey: 
+- |   2048 aa:99:a8:16:68:cd:41:cc:f9:6c:84:01:c7:59:09:5c (RSA)
+- |   256 93:dd:1a:23:ee:d7:1f:08:6b:58:47:09:73:a3:88:cc (ECDSA)
+- |_  256 9d:d6:62:1e:7a:fb:8f:56:92:e6:37:f1:10:db:9b:ce (ED25519)
+- 80/tcp open  http    nostromo 1.9.6
+- |_http-server-header: nostromo 1.9.6
+- |_http-title: TRAVERXEC
+
+
+- enumerating port 80
+- found exploit for nostromo
+- got webshell as www-data
+- running priv esc scripts
+- checking config file for nostromo
+- found hash in file:
+david:$1$e7NfNpNi$A6nCwOTqrNR2oDuIKirRZ/
+david:Nowonly4me
+
+- cracked hash
+- tried ssh and su with password, did not work
+- noticed public_www dir in david's home dir
+- cd to dir
+- found backup file
+- copied to local machine
+- backup ssh keys
+- priv key encrypted
+- ssh2john and john to decrypt
+- id_rsa:hunter
+- logged in as david using priv key + cracked passphrase
+- reviewing bin dir in home dir
+- runs journalctl as sudo
+- checking gtfobins
+- journalctl should be showing results piped in less for priv esc exploit
+- journalctl not showing details in less
+- possibly not enough logs generated
+- generated more logs by creating another webshell and attempting to run sudo
+  cmds
+- got journalctl results with less
+- ran !/bin/bash to get root
+- got root shell
