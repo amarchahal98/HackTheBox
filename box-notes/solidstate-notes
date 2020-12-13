@@ -1,0 +1,57 @@
+OS:
+- Linux (Debian)
+
+Open Ports:
+- 22/tcp   open  ssh         OpenSSH 7.4p1 Debian 10+deb9u1 (protocol 2.0)
+- | ssh-hostkey:
+- |   2048 77:00:84:f5:78:b9:c7:d3:54:cf:71:2e:0d:52:6d:8b (RSA)
+- |   256 78:b8:3a:f6:60:19:06:91:f5:53:92:1d:3f:48:ed:53 (ECDSA)
+- |_  256 e4:45:e9:ed:07:4d:73:69:43:5a:12:70:9d:c4:af:76 (ED25519)
+- 25/tcp   open  smtp        JAMES smtpd 2.3.2
+- |_smtp-commands: solidstate Hello nmap.scanme.org (10.10.14.4 [10.10.14.4]),
+- 80/tcp   open  http        Apache httpd 2.4.25 ((Debian))
+- |_http-server-header: Apache/2.4.25 (Debian)
+- |_http-title: Home - Solid State Security
+- 110/tcp  open  pop3        JAMES pop3d 2.3.2
+- 119/tcp  open  nntp        JAMES nntpd (posting ok)
+- 4555/tcp open  james-admin JAMES Remote Admin 2.3.2
+
+
+- enumerating port 4555
+- was able to login with default creds: root:root
+- created new user: testuser:password
+- enumerating port 25
+- sent an email to testuser@localhost with php script
+
+- listing users from port 4555 nc shell:
+user: james
+user: thomas
+user: john
+user: mindy
+user: testuser
+user: mailadmin
+
+- resetting password for mailadmin
+- mailadmin:pass123
+- nothing in mailbox
+
+- resetting password for james, thomas, john, mindy
+- checking all mailboxes
+- John's mailbox: Note from James to reset and send Mindy her password
+- James's mailbox: empty
+- Thomas's mailbox: empty
+- Mindy's mailbox: creds found:
+username: mindy
+pass: P@55W0rd1!2@
+
+- ssh as user
+- logged into a restricted shell
+- using james remote admin exploit to confirm there is code execution
+- using code execution to spawn a new shell
+- not a restricted shell (in sh)
+- upgraded to bash
+- priv esc scripts
+- /opt/tmp.py
+- 777 permissions
+- modified python script to give reverse shell
+- got root access
