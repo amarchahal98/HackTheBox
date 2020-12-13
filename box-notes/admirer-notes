@@ -1,0 +1,93 @@
+OS:
+- Linux
+
+Open Ports:
+- 21/tcp open  ftp     vsftpd 3.0.3
+- 22/tcp open  ssh     OpenSSH 7.4p1 Debian 10+deb9u7 (protocol 2.0)
+- 80/tcp open  http    Apache httpd 2.4.25 ((Debian))
+- | http-robots.txt: 1 disallowed entry
+- |_/admin-dir
+- |_http-server-header: Apache/2.4.25 (Debian)
+- |_http-title: Admirer
+
+- port 21/22 don't have any outstanding exploits. enumerating port 80
+- robots.txt shows user:
+Username: waldo
+
+robots.txt: Disallow: /admin-dir
+
+- found /admin-dir/contacts.txt
+
+Potential usernames:
+p.wise
+r.nayyar
+a.bialik
+l.galecki
+h.helberg
+b.rauch
+
+
+- found http://10.10.10.187/admin-dir/credentials.txt
+- potential creds:
+
+[Internal mail account]
+w.cooper@admirer.htb
+fgJr6q#S\W:$P
+
+[FTP account]
+ftpuser
+%n?4Wz}R$tTF7
+
+[Wordpress account]
+admin
+w0rdpr3ss01!
+
+- downloading all files from ftpuser creds
+- found zipped html backup
+- unzipped, found another disallow in old robots.txt:
+/w4ld0s_s3cr3t_d1r
+- does not exist anymore
+
+- found creds in old db_admin.php:
+  $servername = "localhost";
+  $username = "waldo";
+  $password = "Wh3r3_1s_w4ld0?";
+
+- found additional creds in credentials.txt in backup
+[Bank Account]
+waldo.11
+Ezy]m27}OREc$
+
+- running strings on dump.sql
+MySQL dump 10.16  Distrib 10.1.41-MariaDB, for debian-linux-gnu (x86_64)
+
+- gathering usernames and hostnames, trying hydra to brute force ssh
+- ftpuser creds work, trying login
+- ssh session closes immediately, login likely not allowed
+- enumerating dirs further in /utility-scripts
+- found /utility-scripts/adminer.php
+- creds not working
+- service being used: adminer 4.6.2
+- researching exploits for service
+
+- will need to authenticate with another db, setting up db server
+- created database: adminerhack
+- created user: dbuser1
+- granted user privileges to db
+- saved config
+
+
+$servername = "localhost";                                                                              |
+$username = "waldo";                                                                                    |
+$password = "&<h5b~yK3F#{PaPB&dA}{H>";                                                                  |
+$dbname = "admirerdb";
+
+- ssh to box as waldo
+- can run a sh script as sudo, with the ability to modify env variables
+- reviewing sh script, calls a python script
+- reviewing python script, imports module
+- created a new function in a python file in /dev/shm for the one being called in python script's module
+- adding a reverse shell in new function
+- ran sh script as sudo and modifying the python env path to /dev/shm
+- the function in /dev/shm's python script was called, got reverse shell
+- root access
