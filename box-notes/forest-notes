@@ -1,0 +1,67 @@
+OS:
+- Windows Server
+
+Open Ports:
+- PORT      STATE         SERVICE
+- 53/udp    open          domain
+- 88/udp    open|filtered kerberos-sec
+- 123/udp   open          ntp
+- 137/udp   open|filtered netbios-ns
+- 138/udp   open|filtered netbios-dgm
+- 389/udp   open|filtered ldap
+- 464/udp   open|filtered kpasswd5
+- 500/udp   open|filtered isakmp
+- 4500/udp  open|filtered nat-t-ike
+- 5353/udp  open|filtered zeroconf
+- 5355/udp  open|filtered llmnr
+- 58797/udp open|filtered unknown
+- 59193/udp open|filtered unknown
+- 59207/udp open|filtered unknown
+- 59765/udp open|filtered unknown
+- 59846/udp open|filtered unknown
+- 60172/udp open|filtered unknown
+- 60381/udp open|filtered unknown
+- 60423/udp open|filtered unknown
+- 61024/udp open|filtered unknown
+- 61142/udp open|filtered unknown
+
+- tried zone transfer on port 53, did not work
+- domain: htb.local
+- tried anonymous smb login, did not work
+- enumerating LDAP
+- found user account: svc-alfresco
+- found setup doc for alfresco: https://docs.alfresco.com/process-services1.8/tasks/ps-auth-kerberos-ADconfig.html
+- user requirements is to disable Kerberos preauthentication
+- ASREPROAST command:
+python3 GetNPUsers.py htb.local/ -dc-ip 10.10.10.161 -request -format hashcat
+
+- got kerberos hash for svc-alfresco
+- hashcat to crack password
+- cracked: s3rvice
+
+- winRM port is open, logging in with evil winRM
+- got user access
+- running winPEAS
+
+- creating smb share for target to connect in on:
+- creds:
+smb12321
+LOGME1in
+
+- running bloodhound
+- creating new AD User
+user1
+P@ssw0rd
+
+- reviewing bloodhound info
+- one of the nested groups is Account Operators
+- Account Operators can create/modify users and add them to non-protected groups
+- Queries > Shortest Path to high Value targets
+
+- Exchange Windows Permissions group has WriteDacl privileges
+- WriteDACL priv gives user ability to add ACLs to an object
+- created new domain user
+- gave user Exchange Windows Permissions rights
+- using secretsdump with created user to get hashes
+- log into Administrator with psexec + hash
+- Domain Admin access
