@@ -1,0 +1,64 @@
+OS:
+- Windows 10.0 Build 17763 x64
+
+Open Ports:
+- 21/tcp    open  ftp
+- 80/tcp    open  http
+- 111/tcp   open  rpcbind
+- 135/tcp   open  msrpc
+- 139/tcp   open  netbios-ssn
+- 445/tcp   open  microsoft-ds
+- 2049/tcp  open  nfs
+- 5985/tcp  open  wsman
+- 47001/tcp open  winrm
+- 49664/tcp open  unknown
+- 49665/tcp open  unknown
+- 49666/tcp open  unknown
+- 49667/tcp open  unknown
+- 49678/tcp open  unknown
+- 49679/tcp open  unknown
+- 49680/tcp open  unknown
+
+21:
+- tried anonymous login
+- no files on server
+- no write access to directory
+
+445:
+- running crackmapexec with --shares
+- found hostname: remote
+
+80:
+- running gobuster
+- found login page at http://10.10.10.180/umbraco/#/login
+- default creds did not work
+
+2049:
+- Export list for 10.10.10.180:
+- /site_backups (everyone)
+- # mount -t nfs -o vers=2 10.10.10.180:site_backups backups -o nolock 
+- got backup dir
+
+- looking through files for credentials
+- found password config file: Umbraco.sdf
+- grep for password
+- grep for hash
+
+found hashes:
+adminadmin@htb.localb8be16afba8c314ad33d812f22a04991b90e2aaa{"hashAlgorithm":"SHA1"}admin@htb.localen-USfeb1a998-d3bf-406a-b30b-e269d7abdf50
+adminadmin@htb.localb8be16afba8c314ad33d812f22a04991b90e2aaa{"hashAlgorithm":"SHA1"}admin@htb.localen-US82756c26-4321-4d27-b429-1b5c7c4f882f
+
+- cracked hash to: baconandcheese
+admin@htb.local
+
+- logged onto umbraco portal
+- looking for umbraco authenticated RCE exploit
+- found, ran nishang ps1 script to get reverse shell
+- got user access
+- running winPEAS
+- found modifiable service: UsoSvc
+- reviewing https://book.hacktricks.xyz/windows/windows-local-privilege-escalation#permissions
+- sc.exe config UsoSVC binpath= "cmd.exe /c powershell cmd + encoded cmd (etc)
+- stop/start service
+- got another reverse shell
+- SYSTEM access
