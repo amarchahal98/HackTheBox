@@ -1,0 +1,41 @@
+OS:
+- Linux (Ubuntu)
+
+Open Ports:
+
+
+
+- enumerating port 80
+- wordpress website
+- running wpscan
+- version: 4.8
+- found user:
+falaraki
+
+- upload dir:
+http://10.10.10.46/wp-content/uploads/2017/07/
+
+- gobuster returns a lot of results that are the same image/size
+- modified gobuster scan to include forward slash at the end and show length of response
+- running cewl to generate wordlist from webpage
+- running gobuster with cewl wordlist
+- one result that isn't the same size as the others:
+/Rightiousness/ (Status: 200) [Size: 175]
+
+- downloaded image
+- steghide against image
+- extracted list.txt
+- ran as password list against brute force with known user
+- found creds: 
+[!] Valid Combinations Found:
+ | Username: falaraki, Password: Transclisiation
+
+- log into falaraki on wordpress
+- modify template to include php RCI
+- got reverse shell
+- running priv esc scripts
+- /etc/passwd is writable
+- using openssl passwd to generate a password
+- placed in /etc/passwd
+- log into root with password
+- root access
