@@ -1,0 +1,45 @@
+OS:
+- Linux (Ubuntu)
+
+Open Ports:
+- 80
+
+- enumerating port 80
+- robots.txt contents:
+Disallow: /webservices/tar/tar/source/
+Disallow: /webservices/monstra-3.0.4/
+Disallow: /webservices/easy-file-uploader/
+Disallow: /webservices/developmental/
+Disallow: /webservices/phpmyadmin/
+
+- checking all websites, found: http://10.10.10.88/webservices/monstra-3.0.4/
+- Webserver: Monstra 3.0.4
+
+- found exposed credential details at:
+http://10.10.10.88/webservices/monstra-3.0.4/storage/database/users.table.xml
+
+- tried cracking hash, no luck
+- found login: http://10.10.10.88/webservices/monstra-3.0.4/admin/index.php
+- default creds: admin:admin
+- creating new theme: shell.template.php
+- unable to make changes or upload data to webserver
+
+- running plugins scan on wp site
+gwolle-gb
+
+- exploit available for RCE
+- got remote shell
+- www-data can use tar as root
+- used gtfobins to priv esc (using sudo -u onuma)
+- onuma has systemctl scheduled job running
+/usr/sbin/backuperer
+
+- script has a diff cmd, which if different will fail and leave all files
+- creating a tar archive with setuid ruid 0 file included
+- set owner:group to root:root
+- copied to target machine
+- waiting for script to execute
+- copied tar file to temporary file created by script for comparison
+- setuid file copied as root
+- ran file
+-got root access
