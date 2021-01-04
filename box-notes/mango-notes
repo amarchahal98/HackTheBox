@@ -1,0 +1,37 @@
+OS:
+- Linux (Ubuntu)
+
+Open Ports:
+- PORT    STATE SERVICE
+- 22/tcp  open  ssh
+- 80/tcp  open  http
+- 443/tcp open  https
+
+- enumerating port 80
+- running gobuster
+- unable to access webpage, getting 403 forbidden
+- confirmed version of webserver: Apache/2.4.29 (Ubuntu)
+- tried t
+
+- enumerating port 443
+- reviewing ssl cert
+- contains common name: http://staging-order.mango.htb/
+- tried accessing port 80 using fqdn
+- got login webpage
+
+- seems to be mongodb
+- trying NoSQL injection for login: https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/NoSQL%20Injection#exploits
+
+- using python script to iterate through each possible character to find user/passwords
+creds found:
+admin:t9KcS3>!0B#2
+mango:
+h3mXK8RhU~f{]f5H
+
+- ssh using mango creds
+- running priv esc scripts
+- found jjs executable
+- gtfobins shows file write possibility
+- wrote to /root/.ssh/authorized_keys
+- ssh using private key
+- root access
