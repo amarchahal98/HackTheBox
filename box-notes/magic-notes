@@ -1,0 +1,39 @@
+OS:
+- Linux (Ubuntu)
+
+Open Ports:
+- PORT   STATE SERVICE
+- 22/tcp open  ssh
+- 80/tcp open  http
+
+- enumerating port 80
+- found /login.php
+- sql injection redirects to file upload page
+- allowed filetypes: JPG, JPEG & PNG 
+- added magic bytes of jpeg image to php webshell
+- uploaded webshell by adding .php.jpeg to end of file
+- got reverse shell
+- got creds from file in webserver:
+    private static $dbUsername = 'theseus';
+    private static $dbUserPassword = 'iamkingtheseus';
+
+- ran mysqldump for db magic. found creds:
+INSERT INTO `login` VALUES (1,'admin','Th3s3usW4sK1ng');
+
+- log in as theseus
+- checking groups. in users group
+- searching for files with group users
+- found file: /bin/sysinfo
+- setuid bit for root
+- ELF 64-bit
+- ran strace with tracing child processes
+- output to file using:
+trace -f sysinfo 1>output2 2>&1
+
+- grep for execve
+- no absolute path for the following free cmd:
+[pid  3281] execve("/bin/sh", ["sh", "-c", "free -h"], 0x7fffdce1f448 /* 25 vars */ <unfinished ...>
+
+- created local free bash script that creates reverse shell
+- chmod +x
+- got reverse shell as root
