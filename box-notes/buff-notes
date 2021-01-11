@@ -1,0 +1,23 @@
+OS:
+- Windows
+
+Open Ports:
+- PORT     STATE SERVICE    VERSION
+- 7680/tcp open  pando-pub?
+- 8080/tcp open  http       Apache httpd 2.4.43 ((Win64) OpenSSL/1.1.1g PHP/7.4.6)
+
+- enumerating port 8080
+- running software:
+Gym Management Software 1.0 
+
+- exploit available for unauthenticated RCE
+- ran, got reverse shell
+
+- running priv esc scripts
+- found download for file: Cloudme
+- searching for exploit
+- buffer overflow available
+- default port is 8888
+- using chisel to port forward to local machine
+- ran buffer overflow exploit with reverse shell
+- got system access
