@@ -1,0 +1,38 @@
+OS: 
+- Windows 10
+
+Open Ports:
+- PORT     STATE SERVICE
+- 80/tcp   open  http
+- 445/tcp  open  microsoft-ds
+- 8808/tcp open  ssports-bcast
+
+- enumerating port 445
+- unable to find shares with anonymous login
+
+- enumerating port 80
+- found login page
+- created new account and signed in
+- noticed password change feature does not request for current password
+- captured pw change post request in burp, changed to GET
+- sent this URL in contact us url with img src tags
+- this changed user tyler's password
+- found the following in tyler's notes:
+
+\\secnotes.htb\new-site
+tyler / 92g!mA8BGjOirkL%OG*&
+
+- enumerating smb shares with creds above
+- found smb share for webserver on 8808
+- uploaded nc.exe + web_shell.php
+- got reverse shell as low priv user
+
+- found wsl installed on system
+- navigated to local files: C:\Users\tyler\Appdata\Local\Packages\CanonicalGroupLimited.Ubuntu18.04onWindows_79rhkp1fndgsc\Localstate\rootfs
+
+- found creds in .bash_history:
+smbclient -U 'administrator%u6!4ZwgwOM#^OBf#Nwnh' \\\\127.0.0.1\\c$
+administrator:u6!4ZwgwOM#^OBf#Nwnh
+
+- psexec to machine
+- system access
