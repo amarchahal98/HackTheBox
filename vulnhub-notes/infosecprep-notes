@@ -1,0 +1,40 @@
+OS:
+- Likely Windows based off ICMP TTL
+
+Open Ports:
+- PORT   STATE SERVICE VERSION
+- 22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.1 (Ubuntu Linux; protocol 2.0)
+- | ssh-hostkey:
+- |   3072 91:ba:0d:d4:39:05:e3:13:55:57:8f:1b:46:90:db:e4 (RSA)
+- |   256 0f:35:d1:a1:31:f2:f6:aa:75:e8:17:01:e7:1e:d1:d5 (ECDSA)
+- |_  256 af:f1:53:ea:7b:4d:d7:fa:d8:de:0d:f2:28:fc:86:d7 (ED25519)
+- 80/tcp open  http    Apache httpd 2.4.41 ((Ubuntu))
+- |_http-generator: WordPress 5.4.2
+- | http-robots.txt: 1 disallowed entry
+- |_/secret.txt
+- |_http-server-header: Apache/2.4.41 (Ubuntu)
+- |_http-title: OSCP Voucher &#8211; Just another WordPress site
+- Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+
+- /robots.txt reveals secrets.txt
+- found base64 ssh private key in file
+- main webpage shows username: oscp
+- logged in using user oscp and ssh key
+- running priv esc scripts
+- copying pspy to find any crons:
+2021/01/26 05:35:32 CMD: UID=0     PID=1      | /sbin/init auto automatic-ubiquity noprompt 
+2021/01/26 05:36:01 CMD: UID=0     PID=41331  | awk { print "http://"$2 } 
+2021/01/26 05:36:01 CMD: UID=0     PID=41330  | grep -v inet6 
+2021/01/26 05:36:01 CMD: UID=0     PID=41329  | /bin/sh /usr/local/bin/get-ip-wordpress 
+2021/01/26 05:36:01 CMD: UID=0     PID=41328  | /bin/sh /usr/local/bin/get-ip-wordpress 
+2021/01/26 05:36:01 CMD: UID=0     PID=41327  | /bin/sh /usr/local/bin/get-ip-wordpress 
+2021/01/26 05:36:01 CMD: UID=0     PID=41326  | /bin/sh /usr/local/bin/get-ip-wordpress 
+2021/01/26 05:36:01 CMD: UID=0     PID=41325  | /bin/sh /root/fix-wordpress 
+2021/01/26 05:36:01 CMD: UID=0     PID=41324  | sh -c /root/fix-wordpress 
+2021/01/26 05:36:01 CMD: UID=0     PID=41323  | /bin/sh -c sh -c "/root/fix-wordpress" 
+2021/01/26 05:36:01 CMD: UID=0     PID=41322  | /usr/sbin/CRON -f 
+2021/01/26 05:36:01 CMD: UID=0     PID=41332  | mysql -u root -N -B 
+
+- /bin/bash has setuid
+- checking gtfobins. bash -p gives root shell
