@@ -1,0 +1,50 @@
+OS:
+- Linux
+
+Open Ports:
+PORT     STATE SERVICE       VERSION
+21/tcp   open  ftp           vsftpd 3.0.3
+22/tcp   open  ssh           OpenSSH 7.9p1 Debian 10+deb10u2 (protocol 2.0)
+| ssh-hostkey:
+|   2048 1b:f2:5d:cd:89:13:f2:49:00:9f:8c:f9:eb:a2:a2:0c (RSA)
+|   256 31:5a:65:2e:ab:0f:59:ab:e0:33:3a:0c:fc:49:e0:5f (ECDSA)
+|_  256 c6:a7:35:14:96:13:f8:de:1e:e2:bc:e7:c7:66:8b:ac (ED25519)
+80/tcp   open  http          Apache httpd 2.4.38 ((Debian))
+|_http-server-header: Apache/2.4.38 (Debian)
+|_http-title: Geisha
+7080/tcp open  ssl/empowerid LiteSpeed
+|_http-server-header: LiteSpeed
+|_http-title: Did not follow redirect to https://192.168.218.82:7080/
+| ssl-cert: Subject: commonName=geisha/organizationName=webadmin/countryName=US
+| Not valid before: 2020-05-09T14:01:34
+|_Not valid after:  2022-05-09T14:01:34
+|_ssl-date: 2021-01-28T03:13:07+00:00; 0s from scanner time.
+| tls-alpn:
+|   h2
+|   spdy/3
+|   spdy/2
+|_  http/1.1
+7125/tcp open  http          nginx 1.17.10
+|_http-server-header: nginx/1.17.10
+|_http-title: Geisha
+8088/tcp open  http          LiteSpeed httpd
+|_http-server-header: LiteSpeed
+|_http-title: Geisha
+9198/tcp open  http          SimpleHTTPServer 0.6 (Python 2.7.16)
+|_http-server-header: SimpleHTTP/0.6 Python/2.7.16
+|_http-title: Geisha
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+- enumerating each port
+- running gobuster + nikto on each
+- found /passwd directory in 7125 webserver
+- shows user: geisha
+- brute forcing SSH login
+- got access using creds:
+geisha:letmein
+
+- running priv esc scripts
+- found binary file that base32 converts file, runs as root
+- copied ssh key
+- logged into ssh using root
+- root access
