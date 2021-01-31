@@ -1,0 +1,22 @@
+OS:
+- Ubuntu Linux
+
+Open Ports:
+- 80
+
+- enumerating port 80
+- fuel cms 1.4
+- testing exploit:
+https://www.exploit-db.com/exploits/47138
+
+- got RCE
+- got reverse shell
+- enumerating for priv esc
+- found DB credentials in webserver file:
+/var/www/html/fuel/application/config/database.php
+
+- db creds:
+root:mememe
+
+- tried su to root with creds above
+- root access
