@@ -1,0 +1,66 @@
+OS:
+- Linux
+
+Open Ports:
+PORT    STATE SERVICE  VERSION
+22/tcp  open  ssh      OpenSSH 7.4p1 Debian 10+deb9u3 (protocol 2.0)
+80/tcp  open  http     Apache httpd 2.4.25
+|_http-server-header: Apache/2.4.25 (Debian)
+|_http-title: Did not follow redirect to https://intra.redcross.htb/
+443/tcp open  ssl/http Apache httpd 2.4.25
+|_http-server-header: Apache/2.4.25 (Debian)
+|_http-title: Did not follow redirect to https://intra.redcross.htb/
+| ssl-cert: Subject: commonName=intra.redcross.htb/organizationName=Red Cross International/stateOrProvinceName=NY/countryName=US
+
+- enumerating port 80
+- redirects to: https://intra.redcross.htb/
+- adding to /etc/hosts
+- redirects to port 443 webserver
+- reviewing certificate information:
+username: penelope
+
+- wordlist for php files in /pages:
+/header.php (Status: 200)
+/login.php (Status: 200)
+/contact.php (Status: 200)
+/actions.php (Status: 302)
+
+- used XSS to receive admin cookie
+- logged in as admin
+
+PHPSESSID=abcnhjhqafffnrgt730m8idur6; LANG=EN_US; SINCE=1612244596; LIMIT=10; DOMAIN=admin
+
+- logged into admin.redcross.htb
+- used same cookie, logged in
+- code injection in the deny function
+- got reverse shell
+- found db creds in actions.php:
+dbconn = pg_connect("host=127.0.0.1 dbname=unix user=unixusrmgr password=dheu%7wjx8B&");
+
+- enumerating db:
+tables:
+ Schema |     Name     | Type  |  Owner
+--------+--------------+-------+----------
+ public | group_table  | table | postgres
+ public | passwd_table | table | postgres
+ public | shadow_table | table | postgres
+ public | usergroups   | table | postgres
+
+ public | group_table  | table | postgres | 8192 bytes | 
+ public | passwd_table | table | postgres | 16 kB      | 
+ public | shadow_table | table | postgres | 8192 bytes | 
+ public | usergroups   | table | postgres | 0 bytes    | 
+
+Permissions for current user:
+- username
+- passwd
+- gid
+- homedir
+- used this to priv esc into a newly created user account
+- found additional sql creds:
+   cnx = mysql.connector.connect(user='dbcross', password='LOSPxnme4f5pH5wp', host='127.0.0.1', database='redcross')
+
+- logged into db
+- able to create a user with uid 0
+- su to user
+- root access
